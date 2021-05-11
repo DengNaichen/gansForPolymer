@@ -1,10 +1,10 @@
 from torch import nn
 
 
-class Critic(nn.Module):
+class Discriminator(nn.Module):
 
     def __init__(self, im_dim=15, hidden_dim=4):
-        super(Critic, self).__init__()
+        super(Discriminator, self).__init__()
         self.disc = nn.Sequential(
             self.get_discriminator_block(im_dim, hidden_dim * 4),
             self.get_discriminator_block(hidden_dim * 4, hidden_dim * 2),
