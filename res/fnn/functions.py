@@ -17,26 +17,29 @@ def get_noise(n_samples, noise_dim, device='cpu'):
 
 
 # get discriminator loss
-def get_disc_loss(gen, disc, criterion, real, num_images, z_dim, device, c_lambda=None):
+def get_disc_loss(gen, disc, loss_func, real, num_images, z_dim, device, c_lambda=None):
 
     noise = get_noise(num_images, z_dim, device=device)
     fake = gen(noise)
     disc_fake_pred = disc(fake.detach())
     disc_real_pred = disc(real)
 
-    if criterion == 'bce':
-        disc_loss = __disc_bce_loss(disc_fake_pred, disc_real_pred)
+    if loss_func == 'bce':
+        criterion = nn.BCEWithLogitsLoss()
+        disc_loss = __disc_bce_loss(disc_fake_pred, disc_real_pred, criterion)
 
-    elif criterion == 'wloss':
+    elif loss_func == 'wloss':
         disc_loss = __disc_get_wloss(real, device, disc, fake, disc_fake_pred, disc_real_pred, c_lambda)
 
     return disc_loss
 
 
 # get BCE loss for discriminator
-def __disc_bce_loss(disc_fake_pred, disc_real_pred):
-    disc_fake_loss = nn.BCEWithLogitsLoss(disc_fake_pred, torch.zeros_like(disc_fake_pred))
-    disc_real_loss = nn.BCEWithLogitsLoss(disc_real_pred, torch.ones_like(disc_real_pred))
+def __disc_bce_loss(disc_fake_pred, disc_real_pred, criterion):
+
+    disc_fake_loss = criterion(disc_fake_pred, torch.zeros_like(disc_fake_pred))
+    disc_real_loss = criterion(disc_real_pred, torch.ones_like(disc_real_pred))
+
     disc_loss = (disc_fake_loss + disc_real_loss) / 2
     return disc_loss
 
@@ -76,18 +79,17 @@ def __gradient_penalty(gradient):
 
 
 # get generator loss
-def get_gen_loss(gen, disc, criterion, num_images, z_dim, device):
+def get_gen_loss(gen, disc, loss_func, num_images, z_dim, device):
 
     noise = get_noise(num_images, z_dim, device=device)
     fake = gen(noise)
     disc_fake_pred = disc(fake)
 
-    if criterion == 'bce':
-        gen_loss = nn.BCEWithLogitsLoss(disc_fake_pred, torch.ones_like(disc_fake_pred))
+    if loss_func == 'bce':
+        criterion = nn.BCEWithLogitsLoss()
+        gen_loss = criterion(disc_fake_pred, torch.ones_like(disc_fake_pred))
 
-    elif criterion == 'wloss':
+    elif loss_func == 'wloss':
         gen_loss = -1. * torch.mean(disc_fake_pred)
 
     return gen_loss
-
-

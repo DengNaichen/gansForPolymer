@@ -1,6 +1,7 @@
 from tqdm.auto import tqdm
 import torch
 import res.fnn.functions as func
+import matplotlib.pyplot as plt
 
 
 def training_bce(gen, disc, z_dim, n_epochs, dataloader, device, disc_opt, gen_opt,
@@ -43,8 +44,9 @@ def training_bce(gen, disc, z_dim, n_epochs, dataloader, device, disc_opt, gen_o
 
 def training_wloss(n_epochs, dataloader, device, disc_repeats, gen, gen_opt,
                    disc, disc_opt, z_dim, c_lambda, display_step):
-
     cur_step = 0
+    generator_losses = []
+    disc_losses = []
 
     for epoch in range(n_epochs):
         # Dataloader returns the batches
@@ -53,7 +55,7 @@ def training_wloss(n_epochs, dataloader, device, disc_repeats, gen, gen_opt,
             # real_image = real_image.to(device)
             real = real.view(cur_batch_size, -1).to(device)
 
-            mean_iteration_critic_loss = 0
+            mean_iteration_disc_loss = 0
             # fix generator, update critic five times
             for _ in range(disc_repeats):
                 # Update critic #
@@ -61,11 +63,12 @@ def training_wloss(n_epochs, dataloader, device, disc_repeats, gen, gen_opt,
                 disc_loss = func.get_disc_loss(gen, disc, "wloss", real, cur_batch_size, z_dim, device, c_lambda)
 
                 # Keep track of the average critic loss in this batch
-                mean_iteration_critic_loss += disc_loss.item() / disc_repeats
+                mean_iteration_disc_loss += disc_loss.item() / disc_repeats
                 # Update gradients
                 disc_loss.backward(retain_graph=True)
                 # Update optimizer
                 disc_opt.step()
+            disc_losses += [mean_iteration_disc_loss]
 
             # Update generator #
             gen_opt.zero_grad()
@@ -75,6 +78,27 @@ def training_wloss(n_epochs, dataloader, device, disc_repeats, gen, gen_opt,
             # Update the weights
             gen_opt.step()
 
+            # keep track of the average generator loss
+            generator_losses += [gen_loss.item()]
+
             # Visualization code #
-            # todo
+            if cur_step % display_step == 0 and cur_step > 0:
+                gen_mean = sum(generator_losses[-display_step:]) / display_step
+                disc_mean = sum(disc_losses[-display_step:]) / display_step
+                print(f"Step {cur_step}: Generator loss: {gen_mean}, Discriminator loss: {disc_mean}")
+                step_bins = 20
+                num_examples = (len(generator_losses) // step_bins) * step_bins
+                plt.plot(
+                    range(num_examples // step_bins),
+                    torch.Tensor(generator_losses[:num_examples]).view(-1, step_bins).mean(1),
+                    label="Generator Loss"
+                )
+                plt.plot(
+                    range(num_examples // step_bins),
+                    torch.Tensor(disc_losses[:num_examples]).view(-1, step_bins).mean(1),
+                    label="Discriminator Loss"
+                )
+                plt.legend()
+                plt.show()
+
             cur_step += 1
