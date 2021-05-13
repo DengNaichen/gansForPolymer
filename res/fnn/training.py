@@ -3,6 +3,9 @@ import torch
 import res.fnn.functions as func
 import matplotlib.pyplot as plt
 
+from res.fnn.generator import Generator
+from res.fnn.discriminator import Discriminator
+
 
 def training_bce(gen, disc, z_dim, n_epochs, dataloader, device, disc_opt, gen_opt,
                  cur_step, display_step, mean_discriminator_loss, mean_generator_loss):
@@ -102,3 +105,11 @@ def training_wloss(n_epochs, dataloader, device, disc_repeats, gen, gen_opt,
                 plt.show()
 
             cur_step += 1
+
+
+def initialize_model(z_dim, im_dim, hidden_dim, device, lr, beta_1, beta_2):
+    gen = Generator(z_dim, im_dim=im_dim, hidden_dim=hidden_dim).to(device)
+    disc = Discriminator(im_dim=im_dim, hidden_dim=hidden_dim).to(device)
+    gen_opt = torch.optim.Adam(gen.parameters(), lr=lr, betas=(beta_1, beta_2))
+    disc_opt = torch.optim.Adam(disc.parameters(), lr=lr, betas=(beta_1, beta_2))
+    return gen, disc, gen_opt, disc_opt

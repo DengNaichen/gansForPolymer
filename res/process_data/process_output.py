@@ -7,6 +7,7 @@ import seaborn as sns
 from pylab import savefig
 
 from res.fnn.generator import Generator
+from res.fnn.discriminator import Discriminator
 
 import res.fnn.functions as func
 import res.process_data.dire_and_coor as dc
@@ -215,16 +216,25 @@ def name_file(name, epoch):
     return name
 
 
-def save_model(gen_path, disc_path, gen, disc):
-    torch.save({'gen_state_dict': gen.state_dict()}, gen_path)
-    torch.save({'disc_state_dict': disc.state_dict()}, disc_path)
+def save_model(gen, disc, name, epoch):
+
+    name_dic = name_file(name, epoch)
+    torch.save({'gen_state_dict': gen.state_dict()}, name_dic['gen_name'])
+    torch.save({'disc_state_dict': disc.state_dict()}, name_dic['disc_name'])
 
 
-def load_model(gen_path, z_dim, im_dim, hidden_dim):
-    gen_model = Generator(z_dim, im_dim, hidden_dim).to('cpu')
-    gen_check_point = torch.load(gen_path)
-    gen_model.load_state_dict(gen_check_point['gen_state_dict'])
-    return gen_model
+def load_model(name_dic, z_dim, im_dim, hidden_dim):
+
+    gen = Generator(z_dim, im_dim, hidden_dim).to('cpu')
+    disc = Discriminator(im_dim, hidden_dim).to('cpu')
+
+    gen_check_point = torch.load(name_dic['gen_name'])
+    disc_check_point = torch.load(name_dic['disc_name'])
+
+    gen.load_state_dict(gen_check_point['gen_state_dict'])
+    disc.load_state_dict(disc_check_point['disc_state_dict'])
+
+    return gen, disc
 
 
 def get_output_coordinate(gen_model, encoding, z_dim, iteration=1000, noise_num=16):
@@ -261,25 +271,32 @@ def check_overlap(directions_three_input, direction_three_output):
     return repeat
 
 
-def process_model(name, epoch, gen, disc, z_dim, im_dim, hidden_dim, encoding, coordinates_input):
-    # save the model
-    name_dic  = name_file(name, epoch)
-    save_model(name_dic['gen_name'], name_dic['disc_name'], gen, disc)
-    # load the model
-    gen_model = load_model(name_dic['gen_name'], z_dim, im_dim, hidden_dim)
+def check_models(name, epoch, z_dim, im_dim, hidden_dim, encoding, coordinates_input):
+    # get file name
+    name_dic = name_file(name, epoch)
+
+    # load models
+    gen, _ = load_model(name_dic, z_dim, im_dim, hidden_dim)
+
     # get output coordinates
-    coordinates_output, output_list= get_output_coordinate(gen_model, encoding, z_dim, iteration=1000, noise_num=16)
+    coordinates_output, output_list = get_output_coordinate(gen, encoding, z_dim, iteration=1000, noise_num=16)
+
     # check features
     folding_count, cross_count, self_avoiding = count_fold_cross(coordinates_output)
+
     # get sub-array contain self_avoiding, return an array(coordinates)
     self_avoiding_polymers = arrange_self_avoid_polymer(coordinates_output, self_avoiding)
+
     # convert input and output to three direction format
     directions_three_output = dc.coordinate_direction_three(self_avoiding_polymers)
     directions_three_input = dc.coordinate_direction_three(coordinates_input)
+
     # remove duplicated items from output
     removed_duplicated, directions_str = remove_duplicated(directions_three_output)
+
     # check overlap with raw data
     repeat = check_overlap(directions_three_input, directions_three_output)
+
     # get n to n distance
     distance_array = np.zeros(len(coordinates_output))
     for i in range(len(distance_array)):
@@ -298,6 +315,7 @@ def process_model(name, epoch, gen, disc, z_dim, im_dim, hidden_dim, encoding, c
             'mean': mean,
             'std': std,
             'mse': mse}
+
     df = pd.DataFrame(data=data)
 
     # save csv
