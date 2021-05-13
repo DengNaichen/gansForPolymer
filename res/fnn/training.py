@@ -8,7 +8,11 @@ from res.fnn.discriminator import Discriminator
 
 
 def training_bce(gen, disc, z_dim, n_epochs, dataloader, device, disc_opt, gen_opt,
-                 cur_step, display_step, mean_discriminator_loss, mean_generator_loss):
+                 display_step):
+
+    mean_discriminator_loss = 0
+    mean_generator_loss = 0
+    cur_step = 0
 
     for epoch in range(n_epochs):
 
