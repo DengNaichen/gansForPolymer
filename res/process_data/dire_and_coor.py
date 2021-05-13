@@ -2,34 +2,34 @@ import numpy as np
 from torch.functional import cartesian_prod
 
 
-# four directions
-def __single_coor_direction_four(single_coor):
-    assert np.shape(single_coor) == (16, 2), "single coordinates shape is not (16, 2)"
+# four directions #
+def __coordinate_direction_four(coordinate):
+    assert np.shape(coordinate) == (16, 2), "single coordinates shape is not (16, 2)"
 
-    single_direction = np.ones([15, 1])
+    direction = np.ones([15, 1])
 
-    for i in range(0, len(single_coor) - 1):
-        change = single_coor[i + 1] - single_coor[i]
+    for i in range(0, len(coordinate) - 1):
+        change = coordinate[i + 1] - coordinate[i]
         if np.array_equal(change, np.asarray([0, 1])):  # up
-            single_direction[i] = 0
+            direction[i] = 0
         elif np.array_equal(change, np.asarray([0, -1])):  # down
-            single_direction[i] = 1 / 3
+            direction[i] = 1 / 3
         elif np.array_equal(change, np.asarray([1, 0])):  # right
-            single_direction[i] = 2 / 3
+            direction[i] = 2 / 3
         elif np.array_equal(change, np.asarray([-1, 0])):  # left
-            single_direction[i] = 1
-
-    return single_direction
-
-
-def coor_direction_four(coor):
-    direction = np.zeros([len(coor),
-                          len(coor[0]) - 1,
-                          1])
-    for i in range(len(coor)):
-        direction[i] = __single_coor_direction_four(coor[i])
+            direction[i] = 1
 
     return direction
+
+
+def coordinates_directions_four(coordinates):
+    directions = np.zeros([len(coordinates),
+                          len(coordinates[0]) - 1,
+                          1])
+    for i in range(len(coordinates)):
+        directions[i] = __coordinate_direction_four(coordinates[i])
+
+    return directions
 
 
 # three directions
@@ -70,74 +70,74 @@ def __next_direction_three(coordinate, prev_index, curr_index, next_index):
                 return 0.5  # left
 
 
-def __single_coordinate_direction_three(coordinate):
-    single_direction = np.zeros([15, 1])
+def __coordinate_direction_three(coordinate):
+    direction = np.zeros([15, 1])
     for i in range(1, 15):
-        single_direction[i] = __next_direction_three(coordinate, i - 1, i, i + 1)
-    return single_direction
+        direction[i] = __next_direction_three(coordinate, i - 1, i, i + 1)
+    return direction
 
 
-def coordinate_direction_three(coordinates):
-    direction = np.zeros([len(coordinates),
+def coordinates_directions_three(coordinates):
+    directions = np.zeros([len(coordinates),
                           len(coordinates[0]) - 1,
                           1])
 
     for i in range(len(coordinates)):
-        direction[i] = __single_coordinate_direction_three(coordinates[i])
-    return direction
+        directions[i] = __coordinate_direction_three(coordinates[i])
+    return directions
 
 
 # encode the direction to one hot vector
-def __single_one_hot_four(single_direction):
-    assert np.shape(single_direction) == (15, 1), "single_direction is not (15, 1)"
-    single_one_hot_four_matrix = np.zeros([len(single_direction), 4])
-    for i in range(len(single_direction)):
-        if single_direction[i] == 0:  # up
-            single_one_hot_four_matrix[i][0] = 1
-        elif single_direction[i] == 1 / 3:  # down
-            single_one_hot_four_matrix[i][1] = 1
-        elif single_direction[i] == 2 / 3:  # right
-            single_one_hot_four_matrix[i][2] = 1
-        elif single_direction[i] == 1:  # left
-            single_one_hot_four_matrix[i][3] = 1
+def __one_hot(direction):
+    assert np.shape(direction) == (15, 1), "single_direction is not (15, 1)"
+    one_hot_matrix = np.zeros([len(direction), 4])
+    for i in range(len(direction)):
+        if direction[i] == 0:  # up
+            one_hot_matrix[i][0] = 1
+        elif direction[i] == 1 / 3:  # down
+            one_hot_matrix[i][1] = 1
+        elif direction[i] == 2 / 3:  # right
+            one_hot_matrix[i][2] = 1
+        elif direction[i] == 1:  # left
+            one_hot_matrix[i][3] = 1
 
-    return single_one_hot_four_matrix
+    return one_hot_matrix
 
 
-def one_hot_four(direction):
-    one_hot_four_matrix = np.zeros([np.shape(direction)[0], np.shape(direction)[1], 4])
-    for i in range(np.shape(direction)[0]):
-        one_hot_four_matrix[i] = __single_one_hot_four(direction[i])
-    return one_hot_four_matrix
+def one_hots(directions):
+    one_hot_matrics = np.zeros([np.shape(directions)[0], np.shape(directions)[1], 4])
+    for i in range(np.shape(directions)[0]):
+        one_hot_matrics[i] = __one_hot(directions[i])
+    return one_hot_matrics
 
 
 # encode the direction to cartesian coordinates
-def __single_cartesian(single_direction):
+def __sincos(single_direction):
     """
     single_direction_list is the numpy ndarray with shape [1,15]
     return: a ndarray with encoded information
     """
     assert np.shape(single_direction) == (15, 1), "single direction is not (15, 1)"
 
-    single_cartesian_2d = np.zeros([15, 2])
+    sincos = np.zeros([15, 2])
 
     for i in range(len(single_direction)):
         if single_direction[i] == 0.:  # up
-            single_cartesian_2d[i][0] = 1
+            sincos[i][0] = 1
         elif single_direction[i] == 1 / 3:  # down
-            single_cartesian_2d[i][0] = -1
+            sincos[i][0] = -1
         elif single_direction[i] == 2 / 3:  # right
-            single_cartesian_2d[i][1] = 1
+            sincos[i][1] = 1
         elif single_direction[i] == 1.:  # left
-            single_cartesian_2d[i][1] = -1
-    return single_cartesian_2d
+            sincos[i][1] = -1
+    return sincos
 
 
-def cartesian_2d(direction):
-    cartesian_2d_matrix = np.zeros([len(direction), 15, 2])
-    for i in range(len(direction)):
-        cartesian_2d_matrix[i] = __single_cartesian(direction[i])
-    return cartesian_2d_matrix
+def sin_cos(directions):
+    sincos_matrix = np.zeros([len(directions), 15, 2])
+    for i in range(len(directions)):
+        sincos_matrix[i] = __sincos(directions[i])
+    return sincos_matrix
 
 
 # decode the information

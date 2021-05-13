@@ -21,7 +21,8 @@ class Generator(nn.Module):
             self.get_generator_block(hidden_dim * 4, hidden_dim * 8),
             # output layer
             nn.Linear(hidden_dim * 8, im_dim),
-            nn.Sigmoid()
+            # nn.Sigmoid()
+            nn.Tanh()
         )
 
     def get_generator_block(self, input_dim, output_dim):
