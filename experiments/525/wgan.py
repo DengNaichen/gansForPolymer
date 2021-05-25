@@ -13,30 +13,30 @@ from random import shuffle
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 # random_input = np.random.randint(low=0, high=2, size=(100000, 15, 1))
-a = np.linspace(-1, 1, 10000)
-b = np.sin(np.pi * 2 * a) ** 2
-interval = (1 + 1) / 10000
-area = interval * b
-numbers = np.round((area / np.sum(area)) * 1500000)
-filled = []
-c = 0
-for i in numbers:
-    for j in range(int(i)):
-        filled.append(a[c])
-    c += 1
-filled.remove(filled[0])
-filled.remove(filled[100])
-# sns.histplot(filled)
-shuffle(filled)
-input_array = np.array(filled)
-input_array = input_array.reshape([100000, 15, 1])
+# a = np.linspace(-1, 1, 10000)
+# b = np.sin(np.pi * 2 * a) ** 2
+# interval = (1 + 1) / 10000
+# area = interval * b
+# numbers = np.round((area / np.sum(area)) * 1500000)
+# filled = []
+# c = 0
+# for i in numbers:
+#     for j in range(int(i)):
+#         filled.append(a[c])
+#     c += 1
+# filled.remove(filled[0])
+# filled.remove(filled[100])
+# # sns.histplot(filled)
+# shuffle(filled)
+# input_array = np.array(filled)
+# input_array = input_array.reshape([50000, 15, 2])
 
 # plot real but random data
 real = []
-for i in range(100000):
+for i in range(50000):
     for j in range(15):
-        # for k in range(4):
-        real.append(input_array[i][j][0])
+        for k in range(2):
+            real.append(input_array[i][j][0])
 # that's the real input, we assume there are 4 peaks
 sns.histplot(real)
 plt.title('real data, total 100,000')
@@ -44,8 +44,8 @@ plt.savefig('real_random.png')
 plt.clf()
 
 z_dim = 2
-im_dim = 15
-hidden_dim = 16
+im_dim = 30
+hidden_dim = 32
 display_step = 782
 lr = 0.0003
 beta_1 = 0.5
@@ -59,7 +59,7 @@ shuffle = True
 num_worker = 0
 pin_memory = True
 input_tensor = torch.Tensor(input_array)
-dataset = tensor_dataset(input_tensor, 15, 1)
+dataset = tensor_dataset(input_tensor, 15, 2)
 dataloader = DataLoader(dataset=dataset,
                         shuffle=shuffle,
                         batch_size=batch_size,
@@ -70,10 +70,10 @@ dataloader = DataLoader(dataset=dataset,
 def check_output(epochs):
     output = []
     for i in range(100):
-        noise = func.get_noise(16, 2)
+        noise = func.get_noise(16, 4)
         a = gen(noise).data.numpy()
         for j in range(16):
-            for k in range(15):
+            for k in range(30):
                 output.append(a[j][k])
     sns.histplot(output)
     plt.savefig(f'{epochs}_epoch.png')

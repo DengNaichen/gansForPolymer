@@ -66,7 +66,7 @@ gen, disc, gen_opt, disc_opt = training.initialize_model(z_dim, im_dim, hidden_d
 # before training, check the distribution of output
 check_output(epochs=0)
 
-for i in range(10):
+for i in range(100):
     n_epochs = 10
     training.training_bce(gen, disc, z_dim, n_epochs, dataloader, device, disc_opt, gen_opt, display_step)
     check_output(n_epochs * (i + 1))

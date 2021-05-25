@@ -22,7 +22,7 @@ class Generator(nn.Module):
             # output layer
             nn.Linear(hidden_dim * 8, im_dim),
             # nn.Sigmoid()
-            nn.Tanh()
+            # nn.Tanh()
             # nn.Softmax()
         )
 
