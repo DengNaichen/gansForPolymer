@@ -23,6 +23,7 @@ class Generator(nn.Module):
             nn.Linear(hidden_dim * 8, im_dim),
             # nn.Sigmoid()
             nn.Tanh()
+            # nn.Softmax()
         )
 
     def get_generator_block(self, input_dim, output_dim):

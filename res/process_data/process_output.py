@@ -50,7 +50,7 @@ def slicing_output(output, encoding_type):
             one_hot_matrix[i] = output[i * 4: (i + 1) * 4]
         return one_hot_matrix
 
-    elif encoding_type == "cartesian":
+    elif encoding_type == "sincos":
         assert len(output) == 30, "length error"
         cartesian_matrix = np.zeros([15, 2])
         for i in range(15):
@@ -225,11 +225,11 @@ def save_model(gen, disc, name, epoch):
 
 def load_model(name_dic, z_dim, im_dim, hidden_dim):
 
-    gen = Generator(z_dim, im_dim, hidden_dim).to('cpu')
-    disc = Discriminator(im_dim, hidden_dim).to('cpu')
+    gen = Generator(z_dim, im_dim, hidden_dim)
+    disc = Discriminator(im_dim, hidden_dim)
 
-    gen_check_point = torch.load(name_dic['gen_name'])
-    disc_check_point = torch.load(name_dic['disc_name'])
+    gen_check_point = torch.load(name_dic['gen_name'], map_location='cpu')
+    disc_check_point = torch.load(name_dic['disc_name'], map_location='cpu')
 
     gen.load_state_dict(gen_check_point['gen_state_dict'])
     disc.load_state_dict(disc_check_point['disc_state_dict'])
@@ -237,24 +237,33 @@ def load_model(name_dic, z_dim, im_dim, hidden_dim):
     return gen, disc
 
 
-def get_output_coordinate(gen_model, encoding, z_dim, iteration=1000, noise_num=16):
+def get_output_coordinate(gen, encoding, z_dim, iteration=1000, noise_num=16):
     coordinates = np.zeros([iteration * noise_num, 16, 2])
     output_list = []
     for i in range(iteration):
+
         noise = func.get_noise(noise_num, z_dim)
-        output = gen_model(noise).data.numpy()
+        output = gen(noise).data.numpy()
         for j in range(noise_num):
-            if encoding == "onehot":
-                one_hot_matrix = slicing_output(output[j], "onehot")
-                direction = one_hot_to_direction_four(one_hot_matrix)
-                coordinate = four_direction_to_coordinates(direction)
+
+            if encoding == "one-hot":
+                one_hot_matrix = slicing_output(output[j], "one-hot")
+                directions = one_hot_to_direction_four(one_hot_matrix)
+                coordinate = four_direction_to_coordinates(directions)
                 coordinates[(i * noise_num) + j] = coordinate
 
             elif encoding == "scalar":
-                direction = slicing_output(output[i], 'scalar')
-                direction_round = round_direction_four(direction)
-                coordinate = four_direction_to_coordinates(direction_round)
+                directions = slicing_output(output[i], 'scalar')
+                directions = round_direction_four(directions)
+                coordinate = four_direction_to_coordinates(directions)
                 coordinates[(i * noise_num) + j] = coordinate
+
+            elif encoding == 'sincos':
+                sin_cos_matrix = slicing_output(output[j], 'sincos')
+                directions = cartesian_to_direction_four(sin_cos_matrix)
+                coordinate = four_direction_to_coordinates(directions)
+                coordinates[(i * noise_num) + j] = coordinate
+
             for k in range(15):
                 output_list.append(output[j][k])
 
@@ -288,8 +297,8 @@ def check_models(name, epoch, z_dim, im_dim, hidden_dim, encoding, coordinates_i
     self_avoiding_polymers = arrange_self_avoid_polymer(coordinates_output, self_avoiding)
 
     # convert input and output to three direction format
-    directions_three_output = dc.coordinate_direction_three(self_avoiding_polymers)
-    directions_three_input = dc.coordinate_direction_three(coordinates_input)
+    directions_three_output = dc.coordinates_directions_three(self_avoiding_polymers)
+    directions_three_input = dc.coordinates_directions_three(coordinates_input)
 
     # remove duplicated items from output
     removed_duplicated, directions_str = remove_duplicated(directions_three_output)
