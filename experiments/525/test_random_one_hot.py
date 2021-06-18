@@ -14,7 +14,7 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 # random_input = np.random.randint(low=0, high=2, size=(100000, 15, 1))
 a = np.linspace(-1, 1, 10000)
-b = np.sin(np.pi * 2 * a) ** 2
+b = np.sin(np.pi * a) ** 2
 interval = (1 + 1) / 10000
 area = interval * b
 numbers = np.round((area / np.sum(area)) * 1500000)
@@ -86,7 +86,7 @@ gen, disc, gen_opt, disc_opt = training.initialize_model(z_dim, im_dim, hidden_d
 # before training, check the distribution of output
 check_output(epochs=0)
 
-for i in range(10):
+for i in range(100):
     n_epochs = 10
     training.training_bce(gen, disc, z_dim, n_epochs, dataloader, device, disc_opt, gen_opt, display_step)
     check_output(n_epochs * (i + 1))

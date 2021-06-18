@@ -14,13 +14,17 @@ class Generator(nn.Module):
         super(Generator, self).__init__()
         self.gen = nn.Sequential(
             # input layer
-            self.get_generator_block(z_dim, hidden_dim),
+            nn.Sequential(
+                nn.Linear(z_dim, hidden_dim),
+                nn.SiLU(inplace=True)),
+            # nn.Dropout(0.5)),
+            # self.get_generator_block(z_dim, hidden_dim),
             # hidden layers
             self.get_generator_block(hidden_dim, hidden_dim * 2),
             self.get_generator_block(hidden_dim * 2, hidden_dim * 4),
-            self.get_generator_block(hidden_dim * 4, hidden_dim * 8),
+            # self.get_generator_block(hidden_dim * 4, hidden_dim * 8),
             # output layer
-            nn.Linear(hidden_dim * 8, im_dim),
+            nn.Linear(hidden_dim * 4, im_dim),
             # nn.Sigmoid()
             # nn.Tanh()
             # nn.Softmax()
@@ -29,8 +33,9 @@ class Generator(nn.Module):
     def get_generator_block(self, input_dim, output_dim):
         return nn.Sequential(
             nn.Linear(input_dim, output_dim),
-            nn.BatchNorm1d(output_dim),
-            nn.ReLU(inplace=True)
+            # nn.BatchNorm1d(output_dim),
+            nn.SiLU(inplace=True),
+            nn.Dropout(0.5)
         )
 
     def forward(self, noise):

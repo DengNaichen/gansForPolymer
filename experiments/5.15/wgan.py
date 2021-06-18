@@ -7,9 +7,11 @@ import res.fnn.training as training
 import res.fnn.functions as func
 import os
 from res.process_data.dataset import tensor_dataset
+from res.fnn.generator import Generator
+from res.fnn.discriminator import Discriminator
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
-random_input = np.random.randint(low=0, high=4, size=(100000, 15, 1)) / 4
+random_input = np.random.randint(low=0, high=2, size=(100000, 15, 1))
 
 # plot real but random data
 real = []
@@ -27,7 +29,7 @@ z_dim = 2
 im_dim = 15
 hidden_dim = 16
 display_step = 782
-lr = 0.0003
+lr = 0.001
 beta_1 = 0.5
 beta_2 = 0.999
 c_lambda = 10
@@ -60,8 +62,15 @@ def check_output(epochs):
     plt.clf()
 
 
-gen, disc, gen_opt, disc_opt = training.initialize_model(z_dim, im_dim, hidden_dim, device, lr, beta_1, beta_2)
+# gen, disc, gen_opt, disc_opt = training.initialize_model(z_dim, im_dim, hidden_dim, device, lr, beta_1, beta_2)
+_, _, gen_opt, disc_opt = training.initialize_model(z_dim, im_dim, hidden_dim, device, lr, beta_1, beta_2)
 
+gen = Generator(z_dim, im_dim, hidden_dim).to(device)
+disc = Discriminator(im_dim, hidden_dim).to(device)
+gen_checkpoint = torch.load('gen_2peaks_bce.pth.tar')
+disc_checkpoint = torch.load('disc_2peaks_bce.pth.tar')
+gen.load_state_dict(gen_checkpoint['gen_state_dict'])
+disc.load_state_dict(disc_checkpoint['gen_state_dict'])
 # before training, check the distribution of output
 check_output(epochs=0)
 
