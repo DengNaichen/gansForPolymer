@@ -21,35 +21,44 @@ def __single_direction_coordinate_three(direction):
     for i in range(1, 15):
         prev = coordinate[i] - coordinate[i - 1]
         if np.array_equal(prev, up):  # up
-            if direction[i][0] == 0:  # forward
+            # if direction[i][0] == 0:  # forward
+            if direction[i][0] == 0.1:
                 coordinate[i + 1] = up + coordinate[i]
-            elif direction[i][0] == 0.5:  # left
+            # elif direction[i][0] == 0.5:  # left
+            elif direction[i][0] == 0.5:
                 coordinate[i + 1] = left + coordinate[i]
-            elif direction[i][0] == 1:  # right
+            # elif direction[i][0] == 1.0:  # right
+            elif direction[i][0] == 0.9:  # right
                 coordinate[i + 1] = right + coordinate[i]
 
         elif np.array_equal(prev, down):  # down
-            if direction[i][0] == 0:  # forward
+            # if direction[i][0] == 0:  # forward
+            if direction[i][0] == 0.1:
                 coordinate[i + 1] = down + coordinate[i]
             elif direction[i][0] == 0.5:  # left
                 coordinate[i + 1] = right + coordinate[i]
-            elif direction[i][0] == 1:  # right
+            # elif direction[i][0] == 1:  # right
+            elif direction[i][0] == 0.9:
                 coordinate[i + 1] = left + coordinate[i]
 
         elif np.array_equal(prev, right):  # right
-            if direction[i][0] == 0:  # forward
+            # if direction[i][0] == 0:  # forward
+            if direction[i][0] == 0.1:
                 coordinate[i + 1] = right + coordinate[i]
             elif direction[i][0] == 0.5:  # left
                 coordinate[i + 1] = up + coordinate[i]
-            elif direction[i][0] == 1:  # right
+            # elif direction[i][0] == 1:  # right
+            elif direction[i][0] == 0.9:
                 coordinate[i + 1] = down + coordinate[i]
 
         elif np.array_equal(prev, left):  # left
-            if direction[i][0] == 0:  # forward
+            # if direction[i][0] == 0:  # forward
+            if direction[i][0] == 0.1:
                 coordinate[i + 1] = left + coordinate[i]
             elif direction[i][0] == 0.5:  # left
                 coordinate[i + 1] = down + coordinate[i]
-            elif direction[i][0] == 1:  # up
+            # elif direction[i][0] == 1:  # up
+            elif direction[i][0] == 0.9:
                 coordinate[i + 1] = up + coordinate[i]
     return coordinate
 

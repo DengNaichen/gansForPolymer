@@ -2,6 +2,7 @@ import torch.nn as nn
 import torch
 import numpy as np
 
+
 class DiscriminatorNet(torch.nn.Module):
     """
     A three hidden-layer discriminative neural network
@@ -23,8 +24,8 @@ class DiscriminatorNet(torch.nn.Module):
             nn.Dropout(0.2)
         )
         self.out = nn.Sequential(
-            torch.nn.Linear(32, n_out),  # yousef
-            torch.nn.Sigmoid()
+            torch.nn.Linear(32, n_out)  # yousef
+            # torch.nn.Sigmoid()
         )
 
     def forward(self, z):
@@ -67,7 +68,5 @@ class GeneratorNet(torch.nn.Module):
 
 # Noise
 def noise(size):
-
     n = torch.tensor(np.random.normal(0, 1, (size, 8)), dtype=torch.float32)
-
     return n

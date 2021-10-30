@@ -10,21 +10,21 @@ class DiscriminatorNet(torch.nn.Module):
 
     def __init__(self):
         super(DiscriminatorNet, self).__init__()
-        n_features = 15
+        n_features = 45
         n_out = 1
 
         self.hidden0 = nn.Sequential(
-            nn.Linear(n_features, 64),  # yousef, best result
+            nn.Linear(n_features, 64),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout(0.3)
         )
         self.hidden1 = nn.Sequential(
-            nn.Linear(64, 32),  # yousef
+            nn.Linear(64, 32),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout(0.2)
         )
         self.out = nn.Sequential(
-            torch.nn.Linear(32, n_out)  # yousef
+            torch.nn.Linear(32, n_out)
             # torch.nn.Sigmoid()
         )
 
@@ -43,19 +43,19 @@ class GeneratorNet(torch.nn.Module):
     def __init__(self):
         super(GeneratorNet, self).__init__()
         n_features = 8
-        n_out = 15
+        n_out = 45
 
         self.hidden0 = nn.Sequential(
-            nn.Linear(n_features, 16),  # yousef
+            nn.Linear(n_features, 16),
             nn.ReLU(inplace=True),
         )
         self.hidden1 = nn.Sequential(
-            nn.Linear(16, 32),  # yousef
+            nn.Linear(16, 64),
             nn.ReLU(inplace=True),
             nn.Dropout(0.3)
         )
         self.out = nn.Sequential(
-            nn.Linear(32, n_out),  # yousef
+            nn.Linear(64, n_out),
             nn.Sigmoid()
         )
 

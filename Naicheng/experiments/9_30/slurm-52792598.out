@@ -1,0 +1,19 @@
+created virtual environment CPython3.8.2.final.0-64 in 8910ms
+  creator CPython3Posix(dest=/local/naicheng.52792598.0/env, clear=False, global=False)
+  seeder FromAppData(download=False, pip=latest, setuptools=latest, wheel=latest, via=copy, app_data_dir=/home/naicheng/.local/share/virtualenv/seed-app-data/v1.0.1)
+  activators BashActivator,CShellActivator,FishActivator,PowerShellActivator,PythonActivator,XonshActivator
+Ignoring pip: markers 'python_version < "3"' don't match your environment
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/avx2, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/torch-1.9.0+computecanada-cp38-cp38-linux_x86_64.whl
+Requirement already satisfied: typing-extensions in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2021a/lib/python3.8/site-packages (from torch) (3.10.0.0+computecanada)
+Installing collected packages: torch
+Successfully installed torch-1.9.0+computecanada
+/project/6001286/naicheng/Naicheng/res/fnn
+Traceback (most recent call last):
+  File "random_traning.py", line 18, in <module>
+    directions = np.load('../../data/random/32monos/four_directions.npy')
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2021a/lib/python3.8/site-packages/numpy/lib/npyio.py", line 440, in load
+    return format.read_array(fid, allow_pickle=allow_pickle,
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2021a/lib/python3.8/site-packages/numpy/lib/format.py", line 787, in read_array
+    array.shape = shape
+ValueError: cannot reshape array of size 16368 into shape (100000,31,1)

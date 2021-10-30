@@ -5,29 +5,29 @@ from PIL import Image
 import torch
 
 
-class image_dataset(Dataset):
-
-    def __init__(self, root_dir, annotation_file, transform=None):
-        """
-        root_dir is the dir of images
-        annotation_file is the file name of csv file
-        no transform for now
-        """
-        self.root_dir = root_dir
-        self.annotations = pd.read_csv(annotation_file)
-        self.transform = transform
-
-    def __len__(self):
-        return len(self.annotations)
-
-    def __getitem__(self, index):
-        img_id = self.annotations.iloc[index, 0]
-        img = Image.open(os.path.join(self.root_dir, img_id))
-        y_label = torch.tensor(float(self.annotations.iloc[index, 1]))
-        if self.transform is not None:
-            img = self.transform(img)
-        # the output is a tuple
-        return img, y_label
+# class image_dataset(Dataset):
+#
+#     def __init__(self, root_dir, annotation_file, transform=None):
+#         """
+#         root_dir is the dir of images
+#         annotation_file is the file name of csv file
+#         no transform for now
+#         """
+#         self.root_dir = root_dir
+#         self.annotations = pd.read_csv(annotation_file)
+#         self.transform = transform
+#
+#     def __len__(self):
+#         return len(self.annotations)
+#
+#     def __getitem__(self, index):
+#         img_id = self.annotations.iloc[index, 0]
+#         img = Image.open(os.path.join(self.root_dir, img_id))
+#         y_label = torch.tensor(float(self.annotations.iloc[index, 1]))
+#         if self.transform is not None:
+#             img = self.transform(img)
+#         # the output is a tuple
+#         return img, y_label
 
 
 class tensor_dataset(Dataset):

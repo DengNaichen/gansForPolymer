@@ -48,7 +48,10 @@ def __read_dat_file(filename):
 
 
 def read_coordinate(num, filename):
-    
+    """
+    num: the length of polymer
+    filename: path of file
+    """
     coor = __read_dat_file(filename)
     coordinate_all = np.zeros([len(coor)//num,num,2])
     for i in range(len(coor)//num):

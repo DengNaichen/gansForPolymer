@@ -1,17 +1,18 @@
-from tarfile import REGTYPE
 import numpy as np
 import torch
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from pylab import savefig
-
+import os
 import sys
 
-from Naicheng.res.fnn.generator import Generator
-from Naicheng.res.fnn.discriminator import Discriminator
-import Naicheng.res.fnn.functions as func
-import Naicheng.res.process_data.dire_and_coor as dc
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+grandparentdir = os.path.dirname(parentdir)
+sys.path.append(grandparentdir)
+
+import res.functions as func
+import res.process_data.dire_and_coor as dc
 
 
 # convert direction to coordinates
@@ -39,34 +40,6 @@ def round_direction_four(single_direction):
     assert np.shape(single_direction) == (15, 1)
 
     return np.round(single_direction * 3) / 3
-
-
-# convert a single polymer's one hot vector to direction
-def slicing_output(output, encoding_type):
-    # can slice only one output
-    if encoding_type == "onehot":
-        assert len(output) == 60, "length error"
-        one_hot_matrix = np.zeros([15, 4])
-        for i in range(15):
-            one_hot_matrix[i] = output[i * 4: (i + 1) * 4]
-        return one_hot_matrix
-
-    elif encoding_type == "sincos":
-        assert len(output) == 30, "length error"
-        cartesian_matrix = np.zeros([15, 2])
-        for i in range(15):
-            cartesian_matrix[i] = output[i * 2, (i + 1) * 4]
-        return cartesian_matrix
-
-    elif encoding_type == "scalar":
-        assert len(output) == 15, "length error"
-        direction = np.zeros([15, 1])
-        for i in range(15):
-            direction[i] = output[i]
-        return direction
-
-    else:
-        print("the encoding type should be onehot, scalar, or cartesian")
 
 
 def __get_max_index(single_one_hot):
@@ -114,7 +87,7 @@ def check_fold_cross(coordinate):
     assert np.shape(coordinate) == (16, 2)
     folding_count = 0
     crossing_count = 0
-    for i in range(1, len(coordinate)):
+    for i in range(0, len(coordinate)):
         temp = coordinate[i]
         if (temp == coordinate[:i]).all(axis=1).any():
             if np.array_equal(temp, coordinate[:i][-2]):
@@ -190,6 +163,7 @@ def __direction_to_str(direction):
     st = ""
     for i in direction:
         st += str(int(i[0] * 2))
+        st += str()
     return st
 
 
@@ -222,20 +196,6 @@ def save_model(gen, disc, name, epoch):
     name_dic = name_file(name, epoch)
     torch.save({'gen_state_dict': gen.state_dict()}, name_dic['gen_name'])
     torch.save({'disc_state_dict': disc.state_dict()}, name_dic['disc_name'])
-
-
-def load_model(name_dic, z_dim, im_dim, hidden_dim):
-
-    gen = Generator(z_dim, im_dim, hidden_dim)
-    disc = Discriminator(im_dim, hidden_dim)
-
-    gen_check_point = torch.load(name_dic['gen_name'], map_location='cpu')
-    disc_check_point = torch.load(name_dic['disc_name'], map_location='cpu')
-
-    gen.load_state_dict(gen_check_point['gen_state_dict'])
-    disc.load_state_dict(disc_check_point['disc_state_dict'])
-
-    return gen, disc
 
 
 def get_output_coordinate(gen, encoding, z_dim, iteration=1000, noise_num=16):
