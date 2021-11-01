@@ -18,7 +18,7 @@ def get_noise_discrete(n_sample, noise_dim, device='cpu'):
 
 
 # get discriminator loss
-def get_disc_loss(gen, disc, loss_func, real, num_images, z_dim, noise_type, device, c_lambda=None):
+def get_disc_loss(gen, disc, loss_func, real, num_images, z_dim, noise_type, device):
 
     global noise
     assert noise_type == 'normal' or 'discrete', 'noise type should be normal or discrete'
@@ -26,8 +26,7 @@ def get_disc_loss(gen, disc, loss_func, real, num_images, z_dim, noise_type, dev
     if noise_type == 'normal':
         noise = get_noise(num_images, z_dim, device=device)
     elif noise_type == 'discrete':
-        noise = get_noise_discrete(num_images, z_dim, device)
-
+        noise = get_noise_discrete(num_images, z_dim, device=device)
     fake = gen(noise)
     disc_fake_pred = disc(fake.detach())
     disc_real_pred = disc(real)
@@ -35,9 +34,6 @@ def get_disc_loss(gen, disc, loss_func, real, num_images, z_dim, noise_type, dev
     if loss_func == 'bce':
         criterion = nn.BCEWithLogitsLoss()
         disc_loss = __disc_bce_loss(disc_fake_pred, disc_real_pred, criterion)
-
-    # elif loss_func == 'wloss':
-    #     disc_loss = __disc_get_wloss(real, device, disc, fake, disc_fake_pred, disc_real_pred, c_lambda)
 
     return disc_loss
 

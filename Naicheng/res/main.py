@@ -72,6 +72,7 @@ if __name__ == '__main__':
         gen = six_layers.GeneratorNet(z_dim, polymer_dim)
         disc = six_layers.DiscriminatorNet(polymer_dim)
 
+    print (gen)
     # load optimizer
     gen_opt = torch.optim.Adam(gen.parameters(), lr=opt.lr)
     disc_opt = torch.optim.Adam(disc.parameters(), lr=opt.lr)
@@ -96,7 +97,7 @@ if __name__ == '__main__':
     loss_value_gen = {}
     for i in range(n_epochs):
         disc_loss, gen_loss = training_bce(gen, disc, z_dim, saving_step, my_dataloader,
-                                           device, disc_opt, gen_opt, noise_type, display_step)
+                                           device, disc_opt, gen_opt, display_step, noise_type)
         total_epoch += saving_step
         save_data.save_model(gen, disc, output_path, total_epoch)
         loss_value_disc[f'epoch{total_epoch}'] = disc_loss
