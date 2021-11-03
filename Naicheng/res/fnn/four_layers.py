@@ -21,7 +21,8 @@ class GeneratorNet(torch.nn.Module):
         )
         self.out = nn.Sequential(
             nn.Linear(64, polymer_dim),
-            nn.Sigmoid()
+            # nn.Sigmoid()
+            nn.Tanh()
         )
 
     def forward(self, z):
@@ -49,7 +50,8 @@ class DiscriminatorNet(torch.nn.Module):
             nn.Dropout(0.2)
         )
         self.out = nn.Sequential(
-            torch.nn.Linear(64, 1)
+            torch.nn.Linear(64, 1),
+            # nn.Sigmoid() # we don't need this since the torch has sigmoid build-in the BCEloss functions
         )
 
     def forward(self, z):

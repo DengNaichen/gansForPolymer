@@ -22,7 +22,11 @@ parser.add_argument('--n_epochs', type=int, default=20, help='number of epochs o
                                                              'epoch is n_epoch * saving step')
 parser.add_argument('--z_dim', type=int, default=8, help='dimension of input random noise')
 parser.add_argument('--polymer_dim', type=int, default=14, help='dimension of fake polymers')
+parser.add_argument('--batch_size', type=int, default=128, help='batch_size')
 parser.add_argument('--saving_step', type=int, default=200, help='saving model per how many epoch')
+parser.add_argument('--load', type=bool, default=False, help='if load a trained model')
+parser.add_argument('--load_path_gen', type=str, default='', help='if load a trained model, the generator path of load')
+parser.add_argument('--load_path_disc', type=str, default='', help='if load a trained model, the disc path of load')
 parser.add_argument('--device', type=str, default='cpu', help='device, cpu or cuda')
 parser.add_argument('--lr', type=float, default=0.001, help='learning rate')
 
@@ -38,6 +42,7 @@ parser.add_argument('--model', type=str, help='the input for the argument should
                                               'single node, three layers, four layers, '
                                               'five layers or six layers')
 parser.add_argument('--noise_type', type=str, help='normal or discrete')
+parser.add_argument('--total_epoch', type=int, default=0, help='total_epoch')
 
 opt = parser.parse_args()
 print(opt)
@@ -47,15 +52,18 @@ if __name__ == '__main__':
     z_dim = opt.z_dim
     polymer_dim = opt.polymer_dim
     device = opt.device
-    total_epoch = 0
-    display_step = 782
     saving_step = opt.saving_step
     output_path = opt.output_models_path
     n_epochs = opt.n_epochs
     model = opt.model
     noise_type = opt.noise_type
+    batch_size = opt.batch_size
+    display_step = 100000 // batch_size
+    load = opt.load
+    load_path_gen = opt.load_path_gen
+    load_path_disc = opt.load_path_disc
+    total_epoch = opt.total_epoch
 
-    # load models
     if model == 'single node':
         gen = single_node.GeneratorNet(z_dim, polymer_dim)
         disc = single_node.DiscriminatorNet(polymer_dim)
@@ -72,7 +80,13 @@ if __name__ == '__main__':
         gen = six_layers.GeneratorNet(z_dim, polymer_dim)
         disc = six_layers.DiscriminatorNet(polymer_dim)
 
-    print (gen)
+    if load:
+        gen_check_point = torch.load(load_path_gen)
+        gen.load_state_dict(gen_check_point['gen_state_dict'])
+        disc_check_point = torch.load(load_path_disc)
+        disc.load_state_dict(disc_check_point['disc_state_dict'])
+
+
     # load optimizer
     gen_opt = torch.optim.Adam(gen.parameters(), lr=opt.lr)
     disc_opt = torch.optim.Adam(disc.parameters(), lr=opt.lr)
@@ -82,7 +96,6 @@ if __name__ == '__main__':
     lengthOfPolymer = np.shape(directions)[1]
 
     shuffle = True
-    batch_size = 125
     num_worker = 0
     pin_memory = True
     input_tensor = torch.Tensor(directions)
