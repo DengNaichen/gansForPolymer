@@ -26,12 +26,12 @@ class MLP(torch.nn.Module):
             # nn.LeakyReLU(0.2, inplace=True),
             # nn.Dropout(0.3)
         )
-        self.hidden0 = nn.Sequential(
+        self.hidden2 = nn.Sequential(
             nn.Linear(32, 64),
             # nn.LeakyReLU(0.2, inplace=True),
             # nn.Dropout(0.3)
         )
-        self.hidden0 = nn.Sequential(
+        self.hidden3 = nn.Sequential(
             nn.Linear(64, 16),
             nn.LeakyReLU(0.2, inplace=True),
             # nn.Dropout(0.3)
@@ -43,6 +43,9 @@ class MLP(torch.nn.Module):
 
     def forward(self, z):
         z = self.hidden0(z)
+        z = self.hidden1(z)
+        z = self.hidden2(z)
+        z = self.hidden3(z)
         z = self.out(z)
         return z
 
