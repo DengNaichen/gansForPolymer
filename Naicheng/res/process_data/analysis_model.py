@@ -7,6 +7,7 @@ from res.process_data.useless import one_hot as oh, slice_output as so
 import rg2 as rg
 import dire_and_coor as dc
 
+
 def count_target_output(output_list, evaluate):
     count_0, count_1, count_2 = 0, 0, 0
     for i in output_list:
