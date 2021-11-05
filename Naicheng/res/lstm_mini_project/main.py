@@ -6,55 +6,15 @@ from torch.utils.data import DataLoader
 import torch.nn as nn
 from tqdm.auto import tqdm
 from dataset import tensor_dataset
+from model import MLP, LSTM
 
 
-class MLP(torch.nn.Module):
-    """
-    A two hidden-layer discriminative neural network
-    """
-
-    def __init__(self):
-        super(MLP, self).__init__()
-
-        self.hidden0 = nn.Sequential(
-            nn.Linear(14, 16),
-            # nn.LeakyReLU(0.2, inplace=True),
-            # nn.Dropout(0.3)
-        )
-        self.hidden1 = nn.Sequential(
-            nn.Linear(16, 32),
-            # nn.LeakyReLU(0.2, inplace=True),
-            # nn.Dropout(0.3)
-        )
-        self.hidden2 = nn.Sequential(
-            nn.Linear(32, 64),
-            # nn.LeakyReLU(0.2, inplace=True),
-            # nn.Dropout(0.3)
-        )
-        self.hidden3 = nn.Sequential(
-            nn.Linear(64, 16),
-            nn.LeakyReLU(0.2, inplace=True),
-            # nn.Dropout(0.3)
-        )
-        self.out = nn.Sequential(
-            torch.nn.Linear(16, 2),
-            # torch.nn.Sigmoid()
-        )
-
-    def forward(self, z):
-        z = self.hidden0(z)
-        z = self.hidden1(z)
-        z = self.hidden2(z)
-        z = self.hidden3(z)
-        z = self.out(z)
-        return z
+time_step = 16
 
 
 if __name__ == '__main__':
     train_data = np.load('data/train_data.npy')
     train_label = np.load('data/train_label.npy')
-
-    # test_
 
     lengthOfPolymer = np.shape(train_data)[1]
 
@@ -71,14 +31,14 @@ if __name__ == '__main__':
                                num_workers=num_worker,
                                pin_memory=pin_memory)
 
-    net = MLP()
+    net = LSTM()
     optimizer = torch.optim.SGD(net.parameters(), lr=0.02)
     loss_func = torch.nn.CrossEntropyLoss()
 
-    for i in range(1000):
+    for i in range(100):
         for data, labels in tqdm(my_dataloader):
             cur_batch_size = len(data)
-            data = data.view(cur_batch_size, -1)
+            data = data.view(cur_batch_size, 14, 1)  # reshape input to (batch, time_step, input_size)
             out = net(data)
             # todo: loss function
             loss = loss_func(out, labels)
@@ -86,4 +46,4 @@ if __name__ == '__main__':
             loss.backward()
             optimizer.step()
 
-    torch.save({'state_dict': net.state_dict()}, 'mlp_2000.pth.tar')
+    torch.save({'state_dict': net.state_dict()}, 'lstm_100.pth.tar')
