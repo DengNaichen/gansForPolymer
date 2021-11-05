@@ -35,7 +35,7 @@ if __name__ == '__main__':
     optimizer = torch.optim.SGD(net.parameters(), lr=0.02)
     loss_func = torch.nn.CrossEntropyLoss()
 
-    for i in range(100):
+    for i in range(500):
         for data, labels in tqdm(my_dataloader):
             cur_batch_size = len(data)
             data = data.view(cur_batch_size, 14, 1)  # reshape input to (batch, time_step, input_size)
@@ -45,5 +45,5 @@ if __name__ == '__main__':
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-
-    torch.save({'state_dict': net.state_dict()}, 'lstm_100.pth.tar')
+        if i%50 == 0:
+            torch.save({'state_dict': net.state_dict()}, f'models/lstm_{i}.pth.tar')
