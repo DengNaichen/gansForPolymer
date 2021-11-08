@@ -31,8 +31,7 @@ parser.add_argument('--device', type=str, default='cpu', help='device, cpu or cu
 parser.add_argument('--lr', type=float, default=0.001, help='learning rate')
 
 # load data and saving model
-parser.add_argument('--input_data_path', type=str, help='path of data source: '
-                                                        '../data/random or self_avoid')
+parser.add_argument('--input_data_path', type=str, help='path of data source: ../data/random or self_avoid')
 
 parser.add_argument('--output_models_path', type=str, help='path of output models: '
                                                            'experiment/data/models '
