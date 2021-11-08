@@ -1,0 +1,113 @@
+Index: res/main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># import third-part modules\nimport argparse\nimport numpy as np\nimport json\nimport torch\nfrom torch.utils.data import DataLoader\n\n# import my models\nimport fnn.single_node as single_node\nimport fnn.three_layers as three_layers\nimport fnn.four_layers as four_layers\nimport fnn.five_layers as five_layers\nimport fnn.six_layers as six_layers\n\n# import my modules\nfrom process_data.dataset import tensor_dataset\nfrom training import training_bce\nimport process_data.save_data as save_data\n\nparser = argparse.ArgumentParser()\nparser.add_argument('--n_epochs', type=int, default=20, help='number of epochs of training，the total'\n                                                             'epoch is n_epoch * saving step')\nparser.add_argument('--z_dim', type=int, default=8, help='dimension of input random noise')\nparser.add_argument('--polymer_dim', type=int, default=14, help='dimension of fake polymers')\nparser.add_argument('--saving_step', type=int, default=200, help='saving model per how many epoch')\nparser.add_argument('--device', type=str, default='cpu', help='device, cpu or cuda')\nparser.add_argument('--lr', type=float, default=0.001, help='learning rate')\n\n# load data and saving model\nparser.add_argument('--input_data_path', type=str, help='path of data source: '\n                                                        '../data/random or self_avoid')\n\nparser.add_argument('--output_models_path', type=str, help='path of output models: '\n                                                           'experiment/data/models '\n                                                           'note: the last one is the model name')\n\nparser.add_argument('--model', type=str, help='the input for the argument should be: '\n                                              'single node, three layers, four layers, '\n                                              'five layers or six layers')\nparser.add_argument('--noise_type', type=str, help='normal or discrete')\n\nopt = parser.parse_args()\nprint(opt)\n\nif __name__ == '__main__':\n\n    z_dim = opt.z_dim\n    polymer_dim = opt.polymer_dim\n    device = opt.device\n    total_epoch = 0\n    display_step = 782\n    saving_step = opt.saving_step\n    output_path = opt.output_models_path\n    n_epochs = opt.n_epochs\n    model = opt.model\n    noise_type = opt.noise_type\n\n    # load models\n    if model == 'single node':\n        gen = single_node.GeneratorNet(z_dim, polymer_dim)\n        disc = single_node.DiscriminatorNet(polymer_dim)\n    elif model == 'three layers':\n        gen = three_layers.GeneratorNet(z_dim, polymer_dim)\n        disc = three_layers.DiscriminatorNet(polymer_dim)\n    elif model == 'four layers':\n        gen = four_layers.GeneratorNet(z_dim, polymer_dim)\n        disc = four_layers.DiscriminatorNet(polymer_dim)\n    elif model == 'five layers':\n        gen = five_layers.GeneratorNet(z_dim, polymer_dim)\n        disc = five_layers.DiscriminatorNet(polymer_dim)\n    elif model == 'six layers':\n        gen = six_layers.GeneratorNet(z_dim, polymer_dim)\n        disc = six_layers.DiscriminatorNet(polymer_dim)\n\n    # load optimizer\n    gen_opt = torch.optim.Adam(gen.parameters(), lr=opt.lr)\n    disc_opt = torch.optim.Adam(disc.parameters(), lr=opt.lr)\n\n    # load input data\n    directions = np.load(opt.input_data_path)\n    lengthOfPolymer = np.shape(directions)[1]\n\n    shuffle = True\n    batch_size = 125\n    num_worker = 0\n    pin_memory = True\n    input_tensor = torch.Tensor(directions)\n    my_dataset = tensor_dataset(input_tensor, lengthOfPolymer, 1)\n    my_dataloader = DataLoader(dataset=my_dataset,\n                               shuffle=shuffle,\n                               batch_size=batch_size,\n                               num_workers=num_worker,\n                               pin_memory=pin_memory)\n\n    loss_value_disc = {}\n    loss_value_gen = {}\n    for i in range(n_epochs):\n        disc_loss, gen_loss = training_bce(gen, disc, z_dim, saving_step, my_dataloader,\n                                           device, disc_opt, gen_opt, noise_type, display_step)\n        total_epoch += saving_step\n        save_data.save_model(gen, disc, output_path, total_epoch)\n        loss_value_disc[f'epoch{total_epoch}'] = disc_loss\n        loss_value_gen[f'epoch{total_epoch}'] = gen_loss\n\n    save_data.save_loss(loss_value_gen, loss_value_disc, output_path)\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/res/main.py b/res/main.py
+--- a/res/main.py	(revision 0bc94116fed79f26aa48c9c914566df091d7e687)
++++ b/res/main.py	(date 1635784405750)
+@@ -96,7 +96,7 @@
+     loss_value_gen = {}
+     for i in range(n_epochs):
+         disc_loss, gen_loss = training_bce(gen, disc, z_dim, saving_step, my_dataloader,
+-                                           device, disc_opt, gen_opt, noise_type, display_step)
++                                           device, disc_opt, gen_opt, display_step, noise_type)
+         total_epoch += saving_step
+         save_data.save_model(gen, disc, output_path, total_epoch)
+         loss_value_disc[f'epoch{total_epoch}'] = disc_loss
+Index: lstm_mini/dataset.ipynb
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lstm_mini/dataset.ipynb b/lstm_mini/dataset.ipynb
+new file mode 100644
+--- /dev/null	(date 1635996252190)
++++ b/lstm_mini/dataset.ipynb	(date 1635996252190)
+@@ -0,0 +1,84 @@
++{
++ "cells": [
++  {
++   "cell_type": "code",
++   "execution_count": 1,
++   "metadata": {},
++   "outputs": [],
++   "source": [
++    "import numpy as np\n"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 4,
++   "metadata": {},
++   "outputs": [],
++   "source": [
++    "random_directions = np.random.randint(0, 4, size=(200000, 14, 1)) / 4 "
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 5,
++   "metadata": {},
++   "outputs": [
++    {
++     "data": {
++      "text/plain": [
++       "array([[0.75],\n",
++       "       [0.  ],\n",
++       "       [0.75],\n",
++       "       [0.  ],\n",
++       "       [0.25],\n",
++       "       [0.25],\n",
++       "       [0.  ],\n",
++       "       [0.5 ],\n",
++       "       [0.  ],\n",
++       "       [0.  ],\n",
++       "       [0.5 ],\n",
++       "       [0.25],\n",
++       "       [0.25],\n",
++       "       [0.  ]])"
++      ]
++     },
++     "execution_count": 5,
++     "metadata": {},
++     "output_type": "execute_result"
++    }
++   ],
++   "source": []
++  },
++  {
++   "cell_type": "code",
++   "execution_count": null,
++   "metadata": {},
++   "outputs": [],
++   "source": []
++  }
++ ],
++ "metadata": {
++  "interpreter": {
++   "hash": "b14e19f88b44d1b13ec8b1e4959d40b1c0ff2a5b4597f1f4fbdd9beb88aea2de"
++  },
++  "kernelspec": {
++   "display_name": "Python 3.7.7 64-bit ('nn': conda)",
++   "name": "python3"
++  },
++  "language_info": {
++   "codemirror_mode": {
++    "name": "ipython",
++    "version": 3
++   },
++   "file_extension": ".py",
++   "mimetype": "text/x-python",
++   "name": "python",
++   "nbconvert_exporter": "python",
++   "pygments_lexer": "ipython3",
++   "version": "3.7.7"
++  },
++  "orig_nbformat": 4
++ },
++ "nbformat": 4,
++ "nbformat_minor": 2
++}

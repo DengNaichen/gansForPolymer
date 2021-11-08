@@ -1,0 +1,344 @@
+Index: .idea/inspectionProfiles/Project_Default.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/inspectionProfiles/Project_Default.xml b/.idea/inspectionProfiles/Project_Default.xml
+new file mode 100644
+--- /dev/null	(date 1635997118157)
++++ b/.idea/inspectionProfiles/Project_Default.xml	(date 1635997118157)
+@@ -0,0 +1,20 @@
++<component name="InspectionProjectProfileManager">
++  <profile version="1.0">
++    <option name="myName" value="Project Default" />
++    <inspection_tool class="DuplicatedCode" enabled="true" level="WEAK WARNING" enabled_by_default="true">
++      <Languages>
++        <language minSize="120" name="Python" />
++      </Languages>
++    </inspection_tool>
++    <inspection_tool class="JupyterPackageInspection" enabled="false" level="WARNING" enabled_by_default="false" />
++    <inspection_tool class="PyPep8NamingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
++      <option name="ignoredErrors">
++        <list>
++          <option value="N801" />
++          <option value="N803" />
++          <option value="N802" />
++        </list>
++      </option>
++    </inspection_tool>
++  </profile>
++</component>
+\ No newline at end of file
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+new file mode 100644
+--- /dev/null	(date 1635997118202)
++++ b/.idea/vcs.xml	(date 1635997118202)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/inspectionProfiles/profiles_settings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/inspectionProfiles/profiles_settings.xml b/.idea/inspectionProfiles/profiles_settings.xml
+new file mode 100644
+--- /dev/null	(date 1635997328290)
++++ b/.idea/inspectionProfiles/profiles_settings.xml	(date 1635997328290)
+@@ -0,0 +1,6 @@
++<component name="InspectionProjectProfileManager">
++  <settings>
++    <option name="USE_PROJECT_PROFILE" value="false" />
++    <version value="1.0" />
++  </settings>
++</component>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+new file mode 100644
+--- /dev/null	(date 1635997362653)
++++ b/.idea/misc.xml	(date 1635997362653)
+@@ -0,0 +1,4 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.7 (nn)" project-jdk-type="Python SDK" />
++</project>
+\ No newline at end of file
+Index: .idea/aws.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/aws.xml b/.idea/aws.xml
+new file mode 100644
+--- /dev/null	(date 1635996755233)
++++ b/.idea/aws.xml	(date 1635996755233)
+@@ -0,0 +1,11 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="accountSettings">
++    <option name="activeRegion" value="us-east-1" />
++    <option name="recentlyUsedRegions">
++      <list>
++        <option value="us-east-1" />
++      </list>
++    </option>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+new file mode 100644
+--- /dev/null	(date 1635997328263)
++++ b/.idea/modules.xml	(date 1635997328263)
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectModuleManager">
++    <modules>
++      <module fileurl="file://$PROJECT_DIR$/.idea/Naicheng.iml" filepath="$PROJECT_DIR$/.idea/Naicheng.iml" />
++    </modules>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/Naicheng.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/Naicheng.iml b/.idea/Naicheng.iml
+new file mode 100644
+--- /dev/null	(date 1635997362637)
++++ b/.idea/Naicheng.iml	(date 1635997362637)
+@@ -0,0 +1,12 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module type="PYTHON_MODULE" version="4">
++  <component name="NewModuleRootManager">
++    <content url="file://$MODULE_DIR$" />
++    <orderEntry type="jdk" jdkName="Python 3.7 (nn)" jdkType="Python SDK" />
++    <orderEntry type="sourceFolder" forTests="false" />
++  </component>
++  <component name="PyDocumentationSettings">
++    <option name="format" value="PLAIN" />
++    <option name="myDocStringFormat" value="Plain" />
++  </component>
++</module>
+\ No newline at end of file
+Index: res/lstm_mini_project/dataset.ipynb
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\n \"cells\": [\n  {\n   \"cell_type\": \"code\",\n   \"execution_count\": 1,\n   \"outputs\": [],\n   \"source\": [\n    \"from torch.utils.data import Dataset\\n\",\n    \"import torch\\n\",\n    \"import numpy as np\\n\",\n    \"import res.process_data.dire_and_coor as dc\"\n   ],\n   \"metadata\": {\n    \"collapsed\": false,\n    \"pycharm\": {\n     \"name\": \"#%%\\n\"\n    }\n   }\n  },\n  {\n   \"cell_type\": \"code\",\n   \"execution_count\": 2,\n   \"outputs\": [],\n   \"source\": [\n    \"# get self avoid polymer\\n\",\n    \"self_avoid_directions = np.load('../../data/self_avoid/16/directions.npy')\\n\",\n    \"self_avoid_coordinates = np.load('../../data/self_avoid/16/coorinates.npy')\"\n   ],\n   \"metadata\": {\n    \"collapsed\": false,\n    \"pycharm\": {\n     \"name\": \"#%%\\n\"\n    }\n   }\n  },\n  {\n   \"cell_type\": \"code\",\n   \"execution_count\": 3,\n   \"outputs\": [],\n   \"source\": [\n    \"# get random polymer\\n\",\n    \"random = np.random.randint(0, 4, size=(120000, 14, 1)) / 4\\n\",\n    \"a = np.zeros((120000, 15, 1))\\n\",\n    \"# make the first one is forward\\n\",\n    \"for i in range(len(random)):\\n\",\n    \"    a[i] = np.vstack(([0], random[i]))\"\n   ],\n   \"metadata\": {\n    \"collapsed\": false,\n    \"pycharm\": {\n     \"name\": \"#%%\\n\"\n    }\n   }\n  },\n  {\n   \"cell_type\": \"code\",\n   \"execution_count\": 4,\n   \"outputs\": [],\n   \"source\": [\n    \"# remove self avoid data\\n\",\n    \"random_coordinate = dc.direction_coordinate_three(a, 16)\"\n   ],\n   \"metadata\": {\n    \"collapsed\": false,\n    \"pycharm\": {\n     \"name\": \"#%%\\n\"\n    }\n   }\n  },\n  {\n   \"cell_type\": \"code\",\n   \"execution_count\": 5,\n   \"outputs\": [],\n   \"source\": [\n    \"def check_fold_cross(coordinate):\\n\",\n    \"    \\\"\\\"\\\"\\n\",\n    \"    check if a single polymer is folding or crossing\\n\",\n    \"    \\\"\\\"\\\"\\n\",\n    \"    assert np.shape(coordinate) == (16, 2)\\n\",\n    \"    folding_count = 0\\n\",\n    \"    crossing_count = 0\\n\",\n    \"    for i in range(0, len(coordinate)):\\n\",\n    \"        temp = coordinate[i]\\n\",\n    \"        if (temp == coordinate[:i]).all(axis=1).any():\\n\",\n    \"            if np.array_equal(temp, coordinate[:i][-2]):\\n\",\n    \"                folding_count += 1\\n\",\n    \"            else:\\n\",\n    \"                crossing_count += 1\\n\",\n    \"    return [folding_count, crossing_count]\"\n   ],\n   \"metadata\": {\n    \"collapsed\": false,\n    \"pycharm\": {\n     \"name\": \"#%%\\n\"\n    }\n   }\n  },\n  {\n   \"cell_type\": \"code\",\n   \"execution_count\": 17,\n   \"outputs\": [],\n   \"source\": [\n    \"c = []\\n\",\n    \"for i in range(len(random_coordinate)):\\n\",\n    \"    if check_fold_cross(random_coordinate[i]) != [0,0]:\\n\",\n    \"        c.append(i) # self avoid\"\n   ],\n   \"metadata\": {\n    \"collapsed\": false,\n    \"pycharm\": {\n     \"name\": \"#%%\\n\"\n    }\n   }\n  },\n  {\n   \"cell_type\": \"code\",\n   \"execution_count\": 18,\n   \"outputs\": [\n    {\n     \"ename\": \"IndexError\",\n     \"evalue\": \"index 119292 is out of bounds for axis 0 with size 119292\",\n     \"output_type\": \"error\",\n     \"traceback\": [\n      \"\\u001B[0;31m---------------------------------------------------------------------------\\u001B[0m\",\n      \"\\u001B[0;31mIndexError\\u001B[0m                                Traceback (most recent call last)\",\n      \"\\u001B[0;32m/var/folders/98/lhwgh_tx6c33q4w0sw0tnn2c0000gn/T/ipykernel_6944/1448070350.py\\u001B[0m in \\u001B[0;36m<module>\\u001B[0;34m\\u001B[0m\\n\\u001B[1;32m      1\\u001B[0m \\u001B[0moutput\\u001B[0m \\u001B[0;34m=\\u001B[0m \\u001B[0mnp\\u001B[0m\\u001B[0;34m.\\u001B[0m\\u001B[0mzeros\\u001B[0m\\u001B[0;34m(\\u001B[0m\\u001B[0;34m(\\u001B[0m\\u001B[0mlen\\u001B[0m\\u001B[0;34m(\\u001B[0m\\u001B[0mc\\u001B[0m\\u001B[0;34m)\\u001B[0m\\u001B[0;34m,\\u001B[0m \\u001B[0;36m14\\u001B[0m\\u001B[0;34m,\\u001B[0m \\u001B[0;36m1\\u001B[0m\\u001B[0;34m)\\u001B[0m\\u001B[0;34m)\\u001B[0m\\u001B[0;34m\\u001B[0m\\u001B[0;34m\\u001B[0m\\u001B[0m\\n\\u001B[1;32m      2\\u001B[0m \\u001B[0;32mfor\\u001B[0m \\u001B[0mi\\u001B[0m \\u001B[0;32min\\u001B[0m \\u001B[0mc\\u001B[0m\\u001B[0;34m:\\u001B[0m\\u001B[0;34m\\u001B[0m\\u001B[0;34m\\u001B[0m\\u001B[0m\\n\\u001B[0;32m----> 3\\u001B[0;31m     \\u001B[0moutput\\u001B[0m\\u001B[0;34m[\\u001B[0m\\u001B[0mi\\u001B[0m\\u001B[0;34m]\\u001B[0m \\u001B[0;34m=\\u001B[0m \\u001B[0mrandom\\u001B[0m\\u001B[0;34m[\\u001B[0m\\u001B[0mi\\u001B[0m\\u001B[0;34m]\\u001B[0m\\u001B[0;34m\\u001B[0m\\u001B[0;34m\\u001B[0m\\u001B[0m\\n\\u001B[0m\",\n      \"\\u001B[0;31mIndexError\\u001B[0m: index 119292 is out of bounds for axis 0 with size 119292\"\n     ]\n    }\n   ],\n   \"source\": [\n    \"output = np.zeros((len(c), 14, 1))\\n\",\n    \"for i in c:\\n\",\n    \"    output[i] = random[i]\"\n   ],\n   \"metadata\": {\n    \"collapsed\": false,\n    \"pycharm\": {\n     \"name\": \"#%%\\n\"\n    }\n   }\n  },\n  {\n   \"cell_type\": \"code\",\n   \"execution_count\": null,\n   \"metadata\": {\n    \"collapsed\": true\n   },\n   \"outputs\": [],\n   \"source\": [\n    \"class tensor_dataset(Dataset):\\n\",\n    \"    def __init__(self, input_tensor, row_dim, column_dim):\\n\",\n    \"        self.input_tensor = input_tensor\\n\",\n    \"        self.row_dim = row_dim\\n\",\n    \"        self.column_dim = column_dim\\n\",\n    \"\\n\",\n    \"    def __len__(self):\\n\",\n    \"        return len(self.input_tensor)\\n\",\n    \"\\n\",\n    \"    def __getitem__(self, index: int):\\n\",\n    \"        tensor_id = index\\n\",\n    \"        tensor = self.input_tensor[tensor_id]\\n\",\n    \"        # convert the tensor from [x,y] to [1, x, y]\\n\",\n    \"        tensor = torch.reshape(tensor, [1, self.row_dim, self.column_dim])\\n\",\n    \"        # all label is 1(no label)\\n\",\n    \"        tensor_label = torch.tensor(1)\\n\",\n    \"        return tensor, tensor_label\"\n   ]\n  },\n  {\n   \"cell_type\": \"code\",\n   \"execution_count\": null,\n   \"outputs\": [],\n   \"source\": [],\n   \"metadata\": {\n    \"collapsed\": false,\n    \"pycharm\": {\n     \"name\": \"#%%\\n\"\n    }\n   }\n  }\n ],\n \"metadata\": {\n  \"kernelspec\": {\n   \"display_name\": \"Python 3\",\n   \"language\": \"python\",\n   \"name\": \"python3\"\n  },\n  \"language_info\": {\n   \"codemirror_mode\": {\n    \"name\": \"ipython\",\n    \"version\": 2\n   },\n   \"file_extension\": \".py\",\n   \"mimetype\": \"text/x-python\",\n   \"name\": \"python\",\n   \"nbconvert_exporter\": \"python\",\n   \"pygments_lexer\": \"ipython2\",\n   \"version\": \"2.7.6\"\n  }\n },\n \"nbformat\": 4,\n \"nbformat_minor\": 0\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/res/lstm_mini_project/dataset.ipynb b/res/lstm_mini_project/dataset.ipynb
+--- a/res/lstm_mini_project/dataset.ipynb	(revision 2db5d7ef72cfe2e703e33ce2e8855e0f5ed219e6)
++++ b/res/lstm_mini_project/dataset.ipynb	(date 1635999568859)
+@@ -97,7 +97,7 @@
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 17,
++   "execution_count": 6,
+    "outputs": [],
+    "source": [
+     "c = []\n",
+@@ -114,24 +114,14 @@
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 18,
+-   "outputs": [
+-    {
+-     "ename": "IndexError",
+-     "evalue": "index 119292 is out of bounds for axis 0 with size 119292",
+-     "output_type": "error",
+-     "traceback": [
+-      "\u001B[0;31m---------------------------------------------------------------------------\u001B[0m",
+-      "\u001B[0;31mIndexError\u001B[0m                                Traceback (most recent call last)",
+-      "\u001B[0;32m/var/folders/98/lhwgh_tx6c33q4w0sw0tnn2c0000gn/T/ipykernel_6944/1448070350.py\u001B[0m in \u001B[0;36m<module>\u001B[0;34m\u001B[0m\n\u001B[1;32m      1\u001B[0m \u001B[0moutput\u001B[0m \u001B[0;34m=\u001B[0m \u001B[0mnp\u001B[0m\u001B[0;34m.\u001B[0m\u001B[0mzeros\u001B[0m\u001B[0;34m(\u001B[0m\u001B[0;34m(\u001B[0m\u001B[0mlen\u001B[0m\u001B[0;34m(\u001B[0m\u001B[0mc\u001B[0m\u001B[0;34m)\u001B[0m\u001B[0;34m,\u001B[0m \u001B[0;36m14\u001B[0m\u001B[0;34m,\u001B[0m \u001B[0;36m1\u001B[0m\u001B[0;34m)\u001B[0m\u001B[0;34m)\u001B[0m\u001B[0;34m\u001B[0m\u001B[0;34m\u001B[0m\u001B[0m\n\u001B[1;32m      2\u001B[0m \u001B[0;32mfor\u001B[0m \u001B[0mi\u001B[0m \u001B[0;32min\u001B[0m \u001B[0mc\u001B[0m\u001B[0;34m:\u001B[0m\u001B[0;34m\u001B[0m\u001B[0;34m\u001B[0m\u001B[0m\n\u001B[0;32m----> 3\u001B[0;31m     \u001B[0moutput\u001B[0m\u001B[0;34m[\u001B[0m\u001B[0mi\u001B[0m\u001B[0;34m]\u001B[0m \u001B[0;34m=\u001B[0m \u001B[0mrandom\u001B[0m\u001B[0;34m[\u001B[0m\u001B[0mi\u001B[0m\u001B[0;34m]\u001B[0m\u001B[0;34m\u001B[0m\u001B[0;34m\u001B[0m\u001B[0m\n\u001B[0m",
+-      "\u001B[0;31mIndexError\u001B[0m: index 119292 is out of bounds for axis 0 with size 119292"
+-     ]
+-    }
+-   ],
++   "execution_count": 8,
++   "outputs": [],
+    "source": [
++    "j = 0\n",
+     "output = np.zeros((len(c), 14, 1))\n",
+     "for i in c:\n",
+-    "    output[i] = random[i]"
++    "    output[j] = np.copy(random[i])\n",
++    "    j += 1"
+    ],
+    "metadata": {
+     "collapsed": false,
+@@ -141,14 +131,35 @@
+    }
+   },
+   {
++   "cell_type": "markdown",
++   "source": [
++    "把上面的两个numpy array 写进数据集\n",
++    "\n",
++    "注意\n",
++    "1. self avoiding polymer --> label = 1\n",
++    "2. not self avoiding polymer --> label = 0\n",
++    "\n",
++    "注意留下来10%的测试数据集"
++   ],
++   "metadata": {
++    "collapsed": false,
++    "pycharm": {
++     "name": "#%% md\n"
++    }
++   }
++  },
++  {
+    "cell_type": "code",
+    "execution_count": null,
+    "metadata": {
+-    "collapsed": true
++    "collapsed": true,
++    "pycharm": {
++     "name": "#%%\n"
++    }
+    },
+    "outputs": [],
+    "source": [
+-    "class tensor_dataset(Dataset):\n",
++    " class tensor_dataset(Dataset):\n",
+     "    def __init__(self, input_tensor, row_dim, column_dim):\n",
+     "        self.input_tensor = input_tensor\n",
+     "        self.row_dim = row_dim\n",
+@@ -166,18 +177,6 @@
+     "        tensor_label = torch.tensor(1)\n",
+     "        return tensor, tensor_label"
+    ]
+-  },
+-  {
+-   "cell_type": "code",
+-   "execution_count": null,
+-   "outputs": [],
+-   "source": [],
+-   "metadata": {
+-    "collapsed": false,
+-    "pycharm": {
+-     "name": "#%%\n"
+-    }
+-   }
+   }
+  ],
+  "metadata": {
+Index: lstm_mini/dataset.ipynb
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lstm_mini/dataset.ipynb b/lstm_mini/dataset.ipynb
+new file mode 100644
+--- /dev/null	(date 1635996690740)
++++ b/lstm_mini/dataset.ipynb	(date 1635996690740)
+@@ -0,0 +1,84 @@
++{
++ "cells": [
++  {
++   "cell_type": "code",
++   "execution_count": 1,
++   "metadata": {},
++   "outputs": [],
++   "source": [
++    "import numpy as np\n"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 4,
++   "metadata": {},
++   "outputs": [],
++   "source": [
++    "random_directions = np.random.randint(0, 4, size=(200000, 14, 1)) / 4 "
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 5,
++   "metadata": {},
++   "outputs": [
++    {
++     "data": {
++      "text/plain": [
++       "array([[0.75],\n",
++       "       [0.  ],\n",
++       "       [0.75],\n",
++       "       [0.  ],\n",
++       "       [0.25],\n",
++       "       [0.25],\n",
++       "       [0.  ],\n",
++       "       [0.5 ],\n",
++       "       [0.  ],\n",
++       "       [0.  ],\n",
++       "       [0.5 ],\n",
++       "       [0.25],\n",
++       "       [0.25],\n",
++       "       [0.  ]])"
++      ]
++     },
++     "execution_count": 5,
++     "metadata": {},
++     "output_type": "execute_result"
++    }
++   ],
++   "source": []
++  },
++  {
++   "cell_type": "code",
++   "execution_count": null,
++   "metadata": {},
++   "outputs": [],
++   "source": []
++  }
++ ],
++ "metadata": {
++  "interpreter": {
++   "hash": "b14e19f88b44d1b13ec8b1e4959d40b1c0ff2a5b4597f1f4fbdd9beb88aea2de"
++  },
++  "kernelspec": {
++   "display_name": "Python 3.7.7 64-bit ('nn': conda)",
++   "name": "python3"
++  },
++  "language_info": {
++   "codemirror_mode": {
++    "name": "ipython",
++    "version": 3
++   },
++   "file_extension": ".py",
++   "mimetype": "text/x-python",
++   "name": "python",
++   "nbconvert_exporter": "python",
++   "pygments_lexer": "ipython3",
++   "version": "3.7.7"
++  },
++  "orig_nbformat": 4
++ },
++ "nbformat": 4,
++ "nbformat_minor": 2
++}
