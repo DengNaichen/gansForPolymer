@@ -23,44 +23,44 @@ lstm_acc =[]
 
 epoch = []
 
-for j in range(0, 500, 50):
+for j in range(0, 2000, 100):
 
     mlp_predict_list = []
-    lstm_predict_list = []
+    # lstm_predict_list = []
     label_list = []
 
-    mlp_check_point = torch.load(f'models/mlp_{j}.pth.tar')
+    mlp_check_point = torch.load(f'models/mlp_two_hidden_{j}.pth.tar')
     mlp_model.load_state_dict(mlp_check_point['state_dict'])
 
-    lstm_check_point = torch.load(f'models/lstm_{j}.pth.tar')
-    lstm_model.load_state_dict(lstm_check_point['state_dict'])
+    # lstm_check_point = torch.load(f'models/lstm_{j}.pth.tar')
+    # lstm_model.load_state_dict(lstm_check_point['state_dict'])
 
     mlp_output = mlp_model(mlp_test_data).data.numpy()
-    lstm_output = lstm_model(lstm_test_data).data.numpy()
+    # lstm_output = lstm_model(lstm_test_data).data.numpy()
 
     for i in range(len(test_label)):
         mlp_predict_list.append(np.argmax(mlp_output[i]))
-        lstm_predict_list.append(np.argmax(lstm_output[i]))
+        # lstm_predict_list.append(np.argmax(lstm_output[i]))
         label_list.append(np.argmax(test_label[i]))
 
 
     mlp_count = 0
-    lstm_count = 0
+    # lstm_count = 0
 
     for i in range(len(mlp_predict_list)):
         if label_list[i] == mlp_predict_list[i]:
             mlp_count += 1
-        if label_list[i] == lstm_predict_list[i]:
-            lstm_count += 1
+        # if label_list[i] == lstm_predict_list[i]:
+        #     lstm_count += 1
 
     epoch.append(j)
     mlp_acc.append(mlp_count/len(label_list))
-    lstm_acc.append(lstm_count / len(label_list))
+    # lstm_acc.append(lstm_count / len(label_list))
 
 plt.plot(epoch, mlp_acc, label='mlp')
-plt.plot(epoch, lstm_acc, label='lstm')
+# plt.plot(epoch, lstm_acc, label='lstm')
 plt.legend()
-plt.savefig('acc.png')
+plt.savefig('mlp_4_layers_acc.png')
 plt.show()
 
 print(mlp_acc)

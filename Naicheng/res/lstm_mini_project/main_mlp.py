@@ -9,7 +9,7 @@ from dataset import tensor_dataset
 from model import MLP, LSTM
 
 
-time_step = 16
+# time_step = 16
 
 
 if __name__ == '__main__':
@@ -35,8 +35,8 @@ if __name__ == '__main__':
     optimizer = torch.optim.SGD(net.parameters(), lr=0.02)
     loss_func = torch.nn.CrossEntropyLoss()
 
-    for i in range(500):
-        for data, labels in tqdm(my_dataloader):
+    for i in tqdm(range(2000)):
+        for data, labels in my_dataloader:
             cur_batch_size = len(data)
             # for lstm
             # data = data.view(cur_batch_size, 14, 1)  # reshape input to (batch, time_step, input_size)
@@ -48,5 +48,5 @@ if __name__ == '__main__':
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-        if i%50 == 0:
-            torch.save({'state_dict': net.state_dict()}, f'models/mlp_{i}.pth.tar')
+        if i%100 == 0:
+            torch.save({'state_dict': net.state_dict()}, f'models/mlp_two_hidden_{i}.pth.tar')

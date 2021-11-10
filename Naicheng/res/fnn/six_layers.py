@@ -36,7 +36,8 @@ class GeneratorNet(torch.nn.Module):
         )
         self.out = nn.Sequential(
             nn.Linear(32, polymer_dim),
-            nn.Sigmoid()
+            # nn.Sigmoid()
+            nn.Tanh()
         )
 
     def forward(self, z):
@@ -88,5 +89,3 @@ class DiscriminatorNet(torch.nn.Module):
         z = self.hidden3(z)
         z = self.out(z)
         return z
-
-

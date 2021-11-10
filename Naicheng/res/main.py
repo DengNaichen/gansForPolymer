@@ -1,5 +1,7 @@
 # import third-part modules
 import argparse
+import matplotlib.pyplot as plt
+import seaborn as sns
 import numpy as np
 import json
 import torch
@@ -67,7 +69,14 @@ if __name__ == '__main__':
     elif encoding_way == 'sin_cos':
         polymer_dim = opt.polymer_dim * 2
         input_sin_cos = torch.Tensor(sin_cos)
+        # add some noise in the real data
+        input_sin_cos += torch.randn_like(input_sin_cos) * 0.02
         my_dataset = tensor_dataset(input_sin_cos, lengthOfPolymer, 2)
+
+        # a = input_sin_cos.data.numpy()
+        # a = a.reshape(-1,1)
+        # sns.histplot(a)
+        # plt.show()
 
     shuffle = True
     num_worker = 0

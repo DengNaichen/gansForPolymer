@@ -35,8 +35,19 @@ def directions_sin_cos(directions):
     return sin_cos_total
 
 
-directions = np.load('../../../data/random/16/directions.npy')
+# directions = np.load('../../../data/random/16/directions.npy')
+# sin_cos = directions_sin_cos(directions)
+# np.save('../../../data/random/16/sin_cos.npy', sin_cos)
 
-sin_cos = directions_sin_cos(directions)
-np.save('../../../data/random/16/sin_cos.npy', sin_cos)
+# directions = np.load('../../../data/self_avoid/16/directions.npy')
+# sin_cos = directions_sin_cos(directions)
+# np.save('../../../data/self_avoid/16/sin_cos.npy', sin_cos)
+
+# sin_cos = np.load('../../../data/self_avoid/16/sin_cos.npy')
+# print(np.shape(sin_cos))
+# import matplotlib.pyplot as plt
+#
+# plt.hist(sin_cos.reshape(-1, 1))
+# plt.show()
+
 

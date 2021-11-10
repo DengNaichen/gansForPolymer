@@ -12,25 +12,27 @@ class GeneratorNet(torch.nn.Module):
 
         self.hidden0 = nn.Sequential(
             nn.Linear(z_dim, 128),
-            nn.ReLU(inplace=True),
-            # nn.SiLU(inplace=True),
-            # nn.Dropout(0.1)
+            nn.BatchNorm1d(128),
+            # nn.ReLU(inplace=True)
+            nn.LeakyReLU(0.2, inplace=True),
         )
         self.hidden1 = nn.Sequential(
             nn.Linear(128, 64),
-            nn.ReLU(inplace=True),
-            # nn.SiLU(inplace=True),
-            nn.Dropout(0.3)
+            nn.BatchNorm1d(64),
+            # nn.ReLU(inplace=True),
+            nn.LeakyReLU(0.2, inplace=True),
         )
         self.hidden2 = nn.Sequential(
             nn.Linear(64, 32),
-            nn.ReLU(inplace=True),
-            # nn.SiLU(inplace=True),
-            nn.Dropout(0.2)
+            nn.BatchNorm1d(32),
+            # nn.ReLU(inplace=True),
+            nn.LeakyReLU(0.2, inplace=True),
         )
         self.out = nn.Sequential(
             nn.Linear(32, polymer_dim),
-            nn.Sigmoid()
+            nn.BatchNorm1d(polymer_dim),
+            # nn.Sigmoid()
+            nn.Tanh()
         )
 
     def forward(self, z):
@@ -66,7 +68,7 @@ class DiscriminatorNet(torch.nn.Module):
         )
         self.out = nn.Sequential(
             torch.nn.Linear(32, 1)
-            # torch.nn.Sigmoid()
+            # don't need sigmoid here since sigmoid is a build-in function for
         )
 
     def forward(self, z):

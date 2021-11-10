@@ -40,9 +40,11 @@ def get_disc_loss(gen, disc, loss_func, real, num_images, z_dim, noise_type, dev
 
 # get BCE loss for discriminator
 def __disc_bce_loss(disc_fake_pred, disc_real_pred, criterion):
-
-    disc_fake_loss = criterion(disc_fake_pred, torch.zeros_like(disc_fake_pred))
-    disc_real_loss = criterion(disc_real_pred, torch.ones_like(disc_real_pred))
+    # torch.zeros_like: Returns a tensor filled with the scalar value 0, with the same size as input
+    # which is the 'hard label', try to add some noise to make the label 'soft'
+    # torch.rand_like: Returns a tensor with the same size as input that is filled with random numbers.
+    disc_fake_loss = criterion(disc_fake_pred, torch.zeros_like(disc_fake_pred) + 0.1 * torch.rand_like(disc_fake_pred))
+    disc_real_loss = criterion(disc_real_pred, torch.ones_like(disc_real_pred) - 0.1 * torch.rand_like(disc_real_pred))
 
     disc_loss = (disc_fake_loss + disc_real_loss) / 2
     return disc_loss
@@ -97,6 +99,7 @@ def get_gen_loss(gen, disc, loss_func, num_images, z_dim, noise_type, device):
 
     if loss_func == 'bce':
         criterion = nn.BCEWithLogitsLoss()
+        # here the label for generator don't have to be 'soften'
         gen_loss = criterion(disc_fake_pred, torch.ones_like(disc_fake_pred))
 
     elif loss_func == 'wloss':
