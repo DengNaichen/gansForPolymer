@@ -83,12 +83,14 @@ def sin_cos_to_directions_on_lattices(output):
 
 # TODO
 def sin_cos_directions_off_lattices(output):
-
-    num_polymer = np.shape(output)[0]
-    polymer_len = np.shape(output)[1] // 2
-
-    output = output.reshape(num_polymer, polymer_len, 2)
+    if len(np.shape(output)) == 2:
+        num_polymer = np.shape(output)[0]
+        polymer_len = np.shape(output)[1] // 2
+        output = output.reshape(num_polymer, polymer_len, 2)
     # convert sin cos coordinates to turn directions
+    elif len(np.shape(output)) == 3:
+        num_polymer = np.shape(output)[0]
+        polymer_len = np.shape(output)[1]
     directions = np.zeros([num_polymer, polymer_len, 1])
 
     for i, direction in enumerate(directions):
