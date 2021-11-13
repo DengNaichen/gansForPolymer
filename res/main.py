@@ -43,8 +43,8 @@ parser.add_argument('--model', type=str, help='the input for the argument should
                                               'five layers or six layers')
 parser.add_argument('--noise_type', type=str, help='normal or discrete')
 parser.add_argument('--total_epoch', type=int, default=0, help='total_epoch')
-parser.add_argument('--encoding_way', type=str, default='encoding method',
-                    help='the encoding method, can be directions or sin_cos')
+# parser.add_argument('--encoding_way', type=str, default='encoding method',
+#                     help='the encoding method, can be directions or sin_cos')
 parser.add_argument('--data_type', type=str, help='on_lattices or off_lattices')
 opt = parser.parse_args()
 print(opt)
@@ -61,29 +61,29 @@ if __name__ == '__main__':
     lengthOfPolymer = np.shape(directions)[1]
 
     # load and reshape my dataset
-    encoding_way = opt.encoding_way
+    # encoding_way = opt.encoding_way
 
     batch_size = opt.batch_size
 
-    assert encoding_way == 'directions' or 'sin_cos'
+    # assert encoding_way == 'directions' or 'sin_cos'
+    #
+    # if encoding_way == 'directions':
+    #     polymer_dim = opt.polymer_dim - 2
+    #     input_directions = torch.Tensor(directions)
+    #     my_dataset = tensor_dataset(input_directions, lengthOfPolymer, 1)
 
-    if encoding_way == 'directions':
-        polymer_dim = opt.polymer_dim - 2
-        input_directions = torch.Tensor(directions)
-        my_dataset = tensor_dataset(input_directions, lengthOfPolymer, 1)
-
-    elif encoding_way == 'sin_cos':
-        if data_type == 'on_lattices':
-            polymer_dim = (opt.polymer_dim - 2) * 2
-            input_sin_cos = torch.Tensor(sin_cos)
-            # add some noise in the real data
-            input_sin_cos += torch.randn_like(input_sin_cos) * 0.02
-            my_dataset = tensor_dataset(input_sin_cos, lengthOfPolymer, 2)
-        elif data_type == 'off_lattices':
-            polymer_dim = (opt.polymer_dim - 1) * 2
-            input_sin_cos = torch.Tensor(sin_cos)
-            print(input_sin_cos.size())
-            my_dataset = tensor_dataset(input_sin_cos, lengthOfPolymer, 2)
+    # elif encoding_way == 'sin_cos':
+    if data_type == 'on_lattices':
+        polymer_dim = (opt.polymer_dim - 2) * 2
+        input_sin_cos = torch.Tensor(sin_cos)
+        # add some noise in the real data
+        input_sin_cos += torch.randn_like(input_sin_cos) * 0.02
+        my_dataset = tensor_dataset(input_sin_cos, lengthOfPolymer, 2)
+    elif data_type == 'off_lattices':
+        polymer_dim = (opt.polymer_dim - 1) * 2
+        input_sin_cos = torch.Tensor(sin_cos)
+        print(input_sin_cos.size())
+        my_dataset = tensor_dataset(input_sin_cos, lengthOfPolymer, 2)
 
 
     shuffle = True
@@ -98,19 +98,19 @@ if __name__ == '__main__':
     # initialize models
     model = opt.model
     z_dim = opt.z_dim
-    if model == 'single node':
+    if model == 'single_node':
         gen = single_node.GeneratorNet(z_dim, polymer_dim)
         disc = single_node.DiscriminatorNet(polymer_dim)
-    elif model == 'three layers':
+    elif model == 'three_layers':
         gen = three_layers.GeneratorNet(z_dim, polymer_dim)
         disc = three_layers.DiscriminatorNet(polymer_dim)
-    elif model == 'four layers':
+    elif model == 'four_layers':
         gen = four_layers.GeneratorNet(z_dim, polymer_dim)
         disc = four_layers.DiscriminatorNet(polymer_dim)
-    elif model == 'five layers':
+    elif model == 'five_layers':
         gen = five_layers.GeneratorNet(z_dim, polymer_dim)
         disc = five_layers.DiscriminatorNet(polymer_dim)
-    elif model == 'six layers':
+    elif model == 'six_layers':
         gen = six_layers.GeneratorNet(z_dim, polymer_dim)
         disc = six_layers.DiscriminatorNet(polymer_dim)
 
@@ -139,7 +139,9 @@ if __name__ == '__main__':
     display_step = 100000 // batch_size
     total_epoch = opt.total_epoch
 
-    # print (gen)
+    output_path = f'../experiments/11_11/{data_type}_{polymer_length}/{model}'
+    print(output_path)
+    print (gen)
     loss_value_disc = {}
     loss_value_gen = {}
     for i in range(n_epochs):

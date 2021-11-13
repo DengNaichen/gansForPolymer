@@ -20,7 +20,7 @@ def training_bce(gen, disc, z_dim, n_epochs, dataloader, device, disc_opt, gen_o
 
     for epoch in range(n_epochs):
 
-        for real, _ in tqdm(dataloader):
+        for real, _ in dataloader:
             cur_batch_size = len(real)
             real = real.view(cur_batch_size, -1).to(device)
 
@@ -44,15 +44,16 @@ def training_bce(gen, disc, z_dim, n_epochs, dataloader, device, disc_opt, gen_o
             # todo
             if display is True:
                 if cur_step % display_step == 0 and cur_step > 0:
-                    print(
-                        f"Epoch {epoch}, step {cur_step}: Generator loss: {mean_generator_loss}, "
-                        f"discriminator loss: {mean_discriminator_loss}")
-                    if noise_type == 'normal':
-                        fake_noise = func.get_noise(cur_batch_size, z_dim, device=device)
-                    elif noise_type == 'discrete':
-                        fake_noise = func.get_noise_discrete(cur_batch_size, z_dim, device=device)
+                    # print(
+                    #     f"Epoch {epoch}, step {cur_step}: Generator loss: {mean_generator_loss}, "
+                    #     f"discriminator loss: {mean_discriminator_loss}")
+                    # if noise_type == 'normal':
+                    #     fake_noise = func.get_noise(cur_batch_size, z_dim, device=device)
+                    # elif noise_type == 'discrete':
+                    #     fake_noise = func.get_noise_discrete(cur_batch_size, z_dim, device=device)
+                    #
+                    # fake = gen(fake_noise)
 
-                    fake = gen(fake_noise)
                     disc_loss_list.append(mean_discriminator_loss)
                     gen_loss_list.append(mean_generator_loss)
                     mean_generator_loss = 0

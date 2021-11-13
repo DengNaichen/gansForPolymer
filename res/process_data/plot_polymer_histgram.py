@@ -4,17 +4,20 @@ import numpy as np
 
 
 def plot_polymer(coordinate):
+    x, y = [], []
     for i in coordinate:
-        plt.plot(i[0], i[1])
+        x.append(i[0])
+        y.append(i[1])
+    plt.plot(x, y, '-o')
     plt.show()
 
 
-def check_output_hist(output, epoch):
+def check_output_hist(output, title):
 
     output = output.reshape(-1,1)
 
     sns.histplot(output)
-    plt.title(f'output of generator{epoch}')
+    plt.title(title)
     plt.show()
 
 
@@ -31,9 +34,9 @@ def check_component_hist(sin_cos):
         for j in i:
             x.append(j[0])
             y.append(j[1])
-    sns.histplot(x)
+    sns.histplot(x, label='sin')
     plt.show()
-    sns.histplot(y)
+    sns.histplot(y, label='cos')
     plt.show()
 
 

@@ -11,17 +11,16 @@ class GeneratorNet(torch.nn.Module):
 
         self.hidden0 = nn.Sequential(
             nn.Linear(z_dim, 128),
-            nn.ReLU(inplace=True),
+            nn.BatchNorm1d(128),
+            nn.LeakyReLU(0.2, inplace=True),
         )
         self.hidden1 = nn.Sequential(
             nn.Linear(128, 64),
-            nn.ReLU(inplace=True),
-            # nn.SiLU(inplace=True),
-            nn.Dropout(0.3)
+            nn.BatchNorm1d(64),
+            nn.LeakyReLU(0.2, inplace=True),
         )
         self.out = nn.Sequential(
             nn.Linear(64, polymer_dim),
-            # nn.Sigmoid()
             nn.Tanh()
         )
 
