@@ -34,10 +34,8 @@ def check_component_hist(sin_cos):
         for j in i:
             x.append(j[0])
             y.append(j[1])
-    sns.histplot(x, label='sin')
-    plt.legend()
-    plt.show()
-    sns.histplot(y, label='cos')
+    sns.kdeplot(x, label='sin')
+    sns.kdeplot(y, label='cos')
     plt.legend()
     plt.show()
 

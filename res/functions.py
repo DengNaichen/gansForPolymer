@@ -19,7 +19,6 @@ def get_noise_discrete(n_sample, noise_dim, device='cpu'):
 
 # get discriminator loss
 def get_disc_loss(gen, disc, loss_func, real, num_images, z_dim, noise_type, device):
-
     global noise
     assert noise_type == 'normal' or 'discrete', 'noise type should be normal or discrete'
 
@@ -27,6 +26,7 @@ def get_disc_loss(gen, disc, loss_func, real, num_images, z_dim, noise_type, dev
         noise = get_noise(num_images, z_dim, device=device)
     elif noise_type == 'discrete':
         noise = get_noise_discrete(num_images, z_dim, device=device)
+
     fake = gen(noise)
     disc_fake_pred = disc(fake.detach())
     disc_real_pred = disc(real)
@@ -34,6 +34,8 @@ def get_disc_loss(gen, disc, loss_func, real, num_images, z_dim, noise_type, dev
     if loss_func == 'bce':
         criterion = nn.BCEWithLogitsLoss()
         disc_loss = __disc_bce_loss(disc_fake_pred, disc_real_pred, criterion)
+    if loss_func == 'w_loss_gp':
+        disc_loss = __disc_w_loss(real, device, disc, fake, disc_fake_pred, disc_real_pred, 10)
 
     return disc_loss
 
@@ -51,12 +53,12 @@ def __disc_bce_loss(disc_fake_pred, disc_real_pred, criterion):
 
 
 # # get w loss for discriminator
-# def __disc_get_wloss(real, device, disc, fake, disc_fake_pred, disc_real_pred, c_lambda):
-#     epsilon = torch.rand(len(real), 1, 1, 1, device=device, requires_grad=True)
-#     gradient = __get_gradient(disc, real, fake.detach(), epsilon)
-#     gp = __gradient_penalty(gradient)
-#     disc_loss = torch.mean(disc_fake_pred) - torch.mean(disc_real_pred) + c_lambda * gp
-#     return disc_loss
+def __disc_w_loss(real, device, disc, fake, disc_fake_pred, disc_real_pred, c_lambda):
+    epsilon = torch.rand(len(real), 1, 1, 1, device=device, requires_grad=True)
+    gradient = __get_gradient(disc, real, fake.detach(), epsilon)
+    gp = __gradient_penalty(gradient)
+    disc_loss = torch.mean(disc_fake_pred) - torch.mean(disc_real_pred) + c_lambda * gp
+    return disc_loss
 
 
 # for wgan, get the gradient penalty
@@ -86,7 +88,6 @@ def __gradient_penalty(gradient):
 
 # get generator loss
 def get_gen_loss(gen, disc, loss_func, num_images, z_dim, noise_type, device):
-
     global noise
     assert noise_type == 'normal' or 'discrete', 'noise type should be normal or discrete'
     if noise_type == 'normal':
@@ -102,7 +103,27 @@ def get_gen_loss(gen, disc, loss_func, num_images, z_dim, noise_type, device):
         # here the label for generator don't have to be 'soften'
         gen_loss = criterion(disc_fake_pred, torch.ones_like(disc_fake_pred))
 
-    elif loss_func == 'wloss':
+        # add penalty
+        # factor = 1
+        # fake_sin_cos = fake.view([num_images, 15, 2])
+        # penalty = factor * torch.sum(torch.square(torch.sum(fake_sin_cos ** 2, dim=2) - 1))
+    if loss_func == 'w_loss_gp':
         gen_loss = -1. * torch.mean(disc_fake_pred)
 
     return gen_loss
+
+
+def normalization_penalty(gen, num_images, z_dim, noise_type, device):
+    factor = 1
+    if noise_type == 'normal':
+        noise = get_noise(num_images, z_dim, device=device)
+    elif noise_type == 'discrete':
+        noise = get_noise_discrete(num_images, z_dim, device)
+    fake = gen(noise)
+    fake_sin_cos = fake.view([num_images, 15, 2])
+
+    penalty = factor * torch.sum(torch.square(torch.sum(fake_sin_cos ** 2, dim=2) - 1))
+
+    return penalty
+
+

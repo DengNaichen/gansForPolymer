@@ -173,11 +173,11 @@ def direction_coordinate_off_lattices(directions):
     step_size = 1
     coordinate = np.zeros([num_polymer, len_polymer, 2])
     for i, direction in enumerate(directions):
-        cummulate = 0
+        cumulate = 0
         for j, each_direction in enumerate(direction):
             next_step = np.array(
-                [np.sin(each_direction[0] + cummulate), np.cos(each_direction[0] + cummulate)]) * step_size
+                [np.sin(each_direction[0] + cumulate), np.cos(each_direction[0] + cumulate)]) * step_size
             coordinate[i][j + 1] = coordinate[i][j] + next_step
-            cummulate = + each_direction[0]
+            cumulate = + each_direction[0]
 
     return coordinate

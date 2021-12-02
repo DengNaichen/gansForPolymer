@@ -48,13 +48,17 @@ def directions_sin_cos_off_lattices(directions):
 
 
 def sin_cos_to_directions_on_lattices(output):
-    num_polymer = np.shape(output)[0]
-    polymer_len = np.shape(output)[1] // 2
 
-    output = output.reshape(num_polymer, polymer_len, 2)
+    if len(np.shape(output)) == 2:
+        num_polymer = np.shape(output)[0]
+        polymer_len = np.shape(output)[1] // 2
+        output = output.reshape(num_polymer, polymer_len, 2)
+    elif len(np.shape(output)) == 3:
+        num_polymer = np.shape(output)[0]
+        polymer_len = np.shape(output)[1]
+    # convert sin cos coordinates to turn directions
     # convert sin cos coordinates to turn directions
     directions = np.zeros([num_polymer, polymer_len, 1])
-
     convert = {
         "backward": 0,
         "right_turn": 1/4,
@@ -95,12 +99,13 @@ def sin_cos_directions_off_lattices(output):
 
     for i, direction in enumerate(directions):
         for j, each_direction in enumerate(direction):
+            each_direction[0] = np.arctan2(output[i][j][0], output[i][j][1])
             # temp = np.arcsin(sin_cos[i][j][0] / factor)
-            temp = np.arctan(output[i][j][0] / output[i][j][1])
-            if output[i][j][0] > 0 and output[i][j][1] < 0:
-                each_direction[0] = temp + np.pi
-            elif output[i][j][0] < 0 and output[i][j][1] < 0:
-                each_direction[0] = temp - np.pi
-            else:
-                each_direction[0] = temp
+            # temp = np.arctan(output[i][j][0] / output[i][j][1])
+            # if output[i][j][0] > 0 and output[i][j][1] < 0:
+            #     each_direction[0] = temp + np.pi
+            # elif output[i][j][0] < 0 and output[i][j][1] < 0:
+            #     each_direction[0] = temp - np.pi
+            # else:
+            #     each_direction[0] = temp
     return directions

@@ -16,8 +16,9 @@ import fnn.six_layers as six_layers
 
 # import my modules
 from process_data.dataset import tensor_dataset
-from training import training_bce
+from training import training_bce, training_w_loss_gp
 import process_data.save_data as save_data
+from tqdm.auto import tqdm
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--n_epochs', type=int, default=20, help='number of epochs of training，the total'
@@ -54,11 +55,12 @@ if __name__ == '__main__':
     data_type = opt.data_type
     polymer_length = opt.polymer_dim
 
-    print('../data/random/' + data_type + f'/{polymer_length}/directions.npy')
-    print('../data/random/' + data_type + f'/{polymer_length}/sin_cos.npy')
     directions = np.load('../data/random/' + data_type + f'/{polymer_length}/directions.npy')
     sin_cos = np.load('../data/random/' + data_type + f'/{polymer_length}/sin_cos.npy')
     lengthOfPolymer = np.shape(directions)[1]
+
+    # sns.histplot(sin_cos.reshape(-1,1))
+    # plt.show()
 
     # load and reshape my dataset
     # encoding_way = opt.encoding_way
@@ -79,12 +81,12 @@ if __name__ == '__main__':
         # add some noise in the real data
         input_sin_cos += torch.randn_like(input_sin_cos) * 0.02
         my_dataset = tensor_dataset(input_sin_cos, lengthOfPolymer, 2)
+
     elif data_type == 'off_lattices':
         polymer_dim = (opt.polymer_dim - 1) * 2
         input_sin_cos = torch.Tensor(sin_cos)
         print(input_sin_cos.size())
         my_dataset = tensor_dataset(input_sin_cos, lengthOfPolymer, 2)
-
 
     shuffle = True
     num_worker = 0
@@ -117,15 +119,15 @@ if __name__ == '__main__':
     print(gen)
     print(disc)
     # load trained model
-    # load = opt.load
-    # print(load)
-    # load_path_gen = opt.load_path_gen
-    # load_path_disc = opt.load_path_disc
-    # if load:
-    #     gen_check_point = torch.load(load_path_gen)
-    #     gen.load_state_dict(gen_check_point['gen_state_dict'])
-    #     disc_check_point = torch.load(load_path_disc)
-    #     disc.load_state_dict(disc_check_point['disc_state_dict'])
+    load = opt.load
+    print(load)
+    load_path_gen = opt.load_path_gen
+    load_path_disc = opt.load_path_disc
+    if load:
+        gen_check_point = torch.load(load_path_gen)
+        gen.load_state_dict(gen_check_point['gen_state_dict'])
+        disc_check_point = torch.load(load_path_disc)
+        disc.load_state_dict(disc_check_point['disc_state_dict'])
 
     # load optimizer
     gen_opt = torch.optim.Adam(gen.parameters(), lr=opt.lr)
@@ -139,14 +141,16 @@ if __name__ == '__main__':
     display_step = 100000 // batch_size
     total_epoch = opt.total_epoch
 
-    output_path = f'../experiments/11_11/{data_type}_{polymer_length}/{model}'
+    output_path = f'../experiments/11_20/{data_type}_{polymer_length}/{model}'
     print(output_path)
-    print (gen)
+    print(gen)
     loss_value_disc = {}
     loss_value_gen = {}
-    for i in range(n_epochs):
+    for i in tqdm(range(n_epochs)):
         disc_loss, gen_loss = training_bce(gen, disc, z_dim, saving_step, my_dataloader,
                                            device, disc_opt, gen_opt, display_step, noise_type)
+        # gen_loss, disc_loss = training_w_loss_gp(gen, disc, z_dim, n_epochs, my_dataloader, device, disc_opt, gen_opt,
+        #                                          display_step, noise_type, 5, display=True)
         total_epoch += saving_step
         save_data.save_model(gen, disc, output_path, total_epoch)
         loss_value_disc[f'epoch{total_epoch}'] = disc_loss
